@@ -1,22 +1,26 @@
+/**
+ * By default, Remix will handle generating the HTTP Response for you.
+ * You are free to delete this file if you'd like to, but if you ever want it revealed again, you can run `npx remix reveal` ✨
+ * For more information, see https://remix.run/file-conventions/entry.server
+ */
+
 import { PassThrough } from 'node:stream'
-import createEmotionCache from '@emotion/cache'
-import { CacheProvider as EmotionCacheProvider } from '@emotion/react'
-import createEmotionServer from '@emotion/server/create-instance'
-import type { EntryContext } from '@remix-run/node'
+import type { AppLoadContext, EntryContext } from '@remix-run/node'
 import { Response } from '@remix-run/node'
 import { RemixServer } from '@remix-run/react'
 import isbot from 'isbot'
 import { renderToPipeableStream } from 'react-dom/server'
 
-const abortDelay = 5000
+const ABORT_DELAY = 5000
 
-const handleRequest = async (
+export default async function handleRequest(
   request: Request,
   responseStatusCode: number,
   responseHeaders: Headers,
   remixContext: EntryContext,
-) =>
-  isbot(request.headers.get('user-agent'))
+  // LoadContext: AppLoadContext,
+) {
+  return isbot(request.headers.get('user-agent'))
     ? handleBotRequest(
         request,
         responseStatusCode,
@@ -29,98 +33,102 @@ const handleRequest = async (
         responseHeaders,
         remixContext,
       )
-export default handleRequest
+}
 
-const handleBotRequest = async (
+async function handleBotRequest(
   request: Request,
   responseStatusCode: number,
   responseHeaders: Headers,
   remixContext: EntryContext,
-) =>
-  new Promise((resolve, reject) => {
-    let didError = false
-    const emotionCache = createEmotionCache({ key: 'css' })
-
+) {
+  return new Promise((resolve, reject) => {
+    let shellRendered = false
     const { pipe, abort } = renderToPipeableStream(
-      <EmotionCacheProvider value={emotionCache}>
-        <RemixServer context={remixContext} url={request.url} />
-      </EmotionCacheProvider>,
+      <RemixServer
+        context={remixContext}
+        url={request.url}
+        abortDelay={ABORT_DELAY}
+      />,
       {
         onAllReady() {
-          const reactBody = new PassThrough()
-          const emotionServer = createEmotionServer(emotionCache)
-
-          const bodyWithStyles = emotionServer.renderStylesToNodeStream()
-          reactBody.pipe(bodyWithStyles)
+          shellRendered = true
+          const body = new PassThrough()
 
           responseHeaders.set('Content-Type', 'text/html')
 
           resolve(
-            new Response(bodyWithStyles, {
+            new Response(body, {
               headers: responseHeaders,
-              status: didError ? 500 : responseStatusCode,
+              status: responseStatusCode,
             }),
           )
 
-          pipe(reactBody)
+          pipe(body)
         },
         onShellError(error: unknown) {
           reject(error)
         },
         onError(error: unknown) {
-          didError = true
-
-          console.error(error)
+          responseStatusCode = 500
+          // Log streaming rendering errors from inside the shell.  Don't log
+          // errors encountered during initial shell rendering since they'll
+          // reject and get logged in handleDocumentRequest.
+          if (shellRendered) {
+            console.error(error)
+          }
         },
       },
     )
 
-    setTimeout(abort, abortDelay)
+    setTimeout(abort, ABORT_DELAY)
   })
+}
 
-const handleBrowserRequest = async (
+async function handleBrowserRequest(
   request: Request,
   responseStatusCode: number,
   responseHeaders: Headers,
   remixContext: EntryContext,
-) =>
-  new Promise((resolve, reject) => {
-    let didError = false
-    const emotionCache = createEmotionCache({ key: 'css' })
-
+) {
+  return new Promise((resolve, reject) => {
+    let shellRendered = false
     const { pipe, abort } = renderToPipeableStream(
-      <EmotionCacheProvider value={emotionCache}>
-        <RemixServer context={remixContext} url={request.url} />
-      </EmotionCacheProvider>,
+      <RemixServer
+        context={remixContext}
+        url={request.url}
+        abortDelay={ABORT_DELAY}
+      />,
       {
         onShellReady() {
-          const reactBody = new PassThrough()
-          const emotionServer = createEmotionServer(emotionCache)
-
-          const bodyWithStyles = emotionServer.renderStylesToNodeStream()
-          reactBody.pipe(bodyWithStyles)
+          shellRendered = true
+          const body = new PassThrough()
 
           responseHeaders.set('Content-Type', 'text/html')
 
           resolve(
-            new Response(bodyWithStyles, {
+            new Response(body, {
               headers: responseHeaders,
-              status: didError ? 500 : responseStatusCode,
+              status: responseStatusCode,
             }),
           )
 
-          pipe(reactBody)
+          pipe(body)
         },
         onShellError(error: unknown) {
           reject(error)
         },
         onError(error: unknown) {
-          didError = true
-
-          console.error(error)
+          responseStatusCode = 500
+          // Log streaming rendering errors from inside the shell.  Don't log
+          // errors encountered during initial shell rendering since they'll
+          // reject and get logged in handleDocumentRequest.
+          if (shellRendered) {
+            console.error(error)
+          }
         },
       },
     )
 
-    setTimeout(abort, abortDelay)
+    setTimeout(abort, ABORT_DELAY)
   })
+}

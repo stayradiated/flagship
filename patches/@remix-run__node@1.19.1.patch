@@ -1,0 +1,12 @@
+diff --git a/dist/upload/fileUploadHandler.d.ts b/dist/upload/fileUploadHandler.d.ts
+index 9baf8a720439015195302fd7b915ffa55c38da91..e62696c0b34c647b95432ecb3fb970dbfd46a834 100644
+--- a/dist/upload/fileUploadHandler.d.ts
++++ b/dist/upload/fileUploadHandler.d.ts
+@@ -44,6 +44,7 @@ export type FileUploadHandlerOptions = {
+     filter?(args: FileUploadHandlerFilterArgs): boolean | Promise<boolean>;
+ };
+ export declare function createFileUploadHandler({ directory, avoidFileConflicts, file, filter, maxPartSize, }?: FileUploadHandlerOptions): UploadHandler;
++/* @ts-expect-error Temporary workaround for https://github.com/remix-run/remix/issues/4371 */
+ export declare class NodeOnDiskFile implements File {
+     private filepath;
+     type: string;
