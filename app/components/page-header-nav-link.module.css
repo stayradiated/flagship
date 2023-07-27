@@ -1,0 +1,15 @@
+.link {
+  text-decoration: none;
+  color: var(--color-grey-500);
+}
+.link:hover {
+  text-decoration: underline;
+}
+
+.link.isActive {
+  color: var(--color-blue-500);
+  font-weight: var(--weight-bold);
+}
+.link.isActive:hover {
+  color: var(--color-blue-300);
+}

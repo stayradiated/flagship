@@ -16,13 +16,20 @@
     "@remix-run/node": "1.19.1",
     "@remix-run/react": "1.19.1",
     "@remix-run/serve": "1.19.1",
+    "@tanstack/react-query": "4.32.0",
+    "@tanstack/react-table": "8.9.3",
+    "react-virtual": "2.10.4",
+    "classcat": "5.0.4",
     "date-fns": "2.30.0",
     "isbot": "3.6.13",
     "normalize.css": "8.0.1",
     "react": "18.2.0",
     "react-dom": "18.2.0",
+    "remix-auth": "3.5.0",
+    "remix-auth-google": "1.2.0",
     "xo": "0.55.0",
-    "zod": "3.21.4"
+    "zod": "3.21.4",
+    "zod-form-data": "2.0.1"
   },
   "devDependencies": {
     "@remix-run/dev": "1.19.1",

@@ -1,0 +1,26 @@
+.container {
+  display: grid;
+  grid-template-columns: var(--grid-2);
+}
+
+.title {
+  font-size: var(--scale-4);
+  font-weight: var(--weight-bold);
+  text-decoration: none;
+  color: var(--color-blue-700);
+}
+.title:hover {
+  text-decoration: underline;
+  color: var(--color-blue-500);
+}
+.title:active {
+  color: var(--color-blue-300);
+}
+
+.nav {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-end;
+  align-items: center;
+  gap: var(--size-2);
+}

@@ -4,7 +4,7 @@ export type PaginatedList<Item> = {
 }
 export type PaginatedArgs = {
   take: number
-  cursor: string | undefined
+  skip: number
 }
 
 export type Feature = {
@@ -28,17 +28,8 @@ export type Account = {
   labelList: Label[]
 }
 
-export type FeatureAccount = {
-  featureId: string
-  accountId: string
-  enabled: boolean
-  createdAt: number
-  updatedAt: number
-}
-
 export type FeatureList = PaginatedList<Feature>
 export type AccountList = PaginatedList<Account>
-export type FeatureAccountList = PaginatedList<FeatureAccount>
 
 export type GetFeatureListFn = (args: PaginatedArgs) => Promise<FeatureList>
 export type GetFeatureFn = (options: { id: string }) => Promise<Feature>
@@ -46,13 +37,13 @@ export type GetFeatureFn = (options: { id: string }) => Promise<Feature>
 export type GetAccountListFn = (args: PaginatedArgs) => Promise<AccountList>
 export type GetAccountFn = (options: { id: string }) => Promise<Account>
 
-export type GetFeatureAccountList = (
+export type GetFeatureListForAccountFn = (
   options: {
     accountId: string
   } & PaginatedArgs,
-) => Promise<FeatureAccountList>
+) => Promise<FeatureList>
 
-export type GetAccountListForFeature = (
+export type GetAccountListForFeatureFn = (
   options: {
     featureId: string
     enabled: boolean
@@ -66,6 +57,6 @@ export type FlagshipBackend = {
   getAccount: GetAccountFn
   getAccountList: GetAccountListFn
 
-  getFeatureAccountList: GetFeatureAccountList
-  getAccountListForFeature: GetAccountListForFeature
+  getFeatureListForAccount: GetFeatureListForAccountFn
+  getAccountListForFeature: GetAccountListForFeatureFn
 }

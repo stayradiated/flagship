@@ -4,25 +4,31 @@ import { useLoaderData } from '@remix-run/react'
 import { z } from 'zod'
 import { createRunnBackend } from '~/lib/runn.server'
 import type { Feature, AccountList } from '~/lib/types'
-import { AccountTable } from '~/components/account-table'
-
-const meta: V2_MetaFunction = () => {
-  return [
-    { title: 'Flagship' },
-    { name: 'description', content: 'Manage Feature Flags' },
-  ]
-}
+import { FeaturePage } from '~/components/page/feature'
+import { authenticator } from '~/lib/auth.server'
 
 type LoaderData = {
   feature: Feature
   accountList: AccountList
 }
 
+const meta: V2_MetaFunction<LoaderData> = ({ data }) => {
+  const { feature } = data
+  return [
+    { title: `${feature.name} • Flagship` },
+    { name: 'description', content: 'Manage Feature Flags' },
+  ]
+}
+
 const $LoaderParameters = z.object({
   featureId: z.string(),
 })
 
-const loader: LoaderFunction = async ({ params }) => {
+const loader: LoaderFunction = async ({ request, params }) => {
+  await authenticator.authenticate('google', request, {
+    failureRedirect: '/login',
+  })
+
   const { featureId } = $LoaderParameters.parse(params)
 
   const backend = createRunnBackend()
@@ -33,7 +39,7 @@ const loader: LoaderFunction = async ({ params }) => {
       featureId,
       enabled: true,
       take: 10,
-      cursor: undefined,
+      skip: 0,
     }),
   ])
 
@@ -44,11 +50,12 @@ const Route = () => {
   const { feature, accountList } = useLoaderData<LoaderData>()
 
   return (
-    <main>
-      <h1>{feature.name}</h1>
-
-      <AccountTable accountList={accountList} />
-    </main>
+    <FeaturePage
+      feature={feature}
+      accountList={accountList}
+      pageIndex={1}
+      pageSize={10}
+    />
   )
 }
 

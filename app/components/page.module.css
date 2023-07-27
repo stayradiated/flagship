@@ -1,0 +1,14 @@
+.container {
+  display: grid;
+  grid-template-columns: var(--grid-page);
+}
+
+.container > * {
+  grid-column: var(--grid-page-main);
+}
+
+.hr {
+  grid-column: 1 / -1; /* full width */
+  border-bottom: var(--size-1) solid var(--color-grey-300);
+  margin-bottom: var(--size-2);
+}

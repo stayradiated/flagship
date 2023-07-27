@@ -97,19 +97,30 @@ const createRunnBackend = (): FlagshipBackend => {
         updatedAt: dateFns.parseISO(feature.updated_at).getTime(),
       }
     },
-    async getAccountList() {
-      const body = await graphql(`
-        query {
-          accounts(order_by: { id: asc }) {
-            id
-            name
-            account_type
+    async getAccountList({ take, skip }) {
+      const body = await graphql(
+        `
+          query ($take: Int!, $skip: Int!) {
+            accounts(order_by: { id: asc }, limit: $take, offset: $skip) {
+              id
+              name
+              account_type
+            }
+            accounts_aggregate {
+              aggregate {
+                count
+              }
+            }
           }
-        }
-      `)
+        `,
+        {
+          take,
+          skip,
+        },
+      )
 
       return {
-        total: 0,
+        total: body.data.accounts_aggregate.aggregate.count,
         items: body.data.accounts.map((account: any) => ({
           id: account.id,
           name: account.name,
@@ -122,22 +133,37 @@ const createRunnBackend = (): FlagshipBackend => {
         })),
       }
     },
-    async getFeatureList() {
-      const body = await graphql(`
-        query {
-          features(order_by: { created_at: asc }) {
-            id
-            name
-            description
-            enabled
-            created_at
-            updated_at
+    async getFeatureList({ take, skip }) {
+      const body = await graphql(
+        `
+          query ($take: Int!, $skip: Int!) {
+            features(
+              order_by: { created_at: asc }
+              limit: $take
+              offset: $skip
+            ) {
+              id
+              name
+              description
+              enabled
+              created_at
+              updated_at
+            }
+            features_aggregate {
+              aggregate {
+                count
+              }
+            }
           }
-        }
-      `)
+        `,
+        {
+          take,
+          skip,
+        },
+      )
 
       return {
-        total: 0,
+        total: body.data.features_aggregate.aggregate.count,
         items: body.data.features.map((feature: any) => ({
           id: feature.id,
           name: feature.name,
@@ -149,7 +175,8 @@ const createRunnBackend = (): FlagshipBackend => {
         })),
       }
     },
-    async getFeatureAccountList({ accountId }) {
+
+    async getFeatureListForAccount({ accountId }) {
       const body = await graphql(
         `
           query ($accountId: Int!) {
@@ -157,11 +184,15 @@ const createRunnBackend = (): FlagshipBackend => {
               where: { account_id: { _eq: $accountId } }
               order_by: { created_at: asc }
             ) {
-              feature_id
-              account_id
               enabled
               created_at
               updated_at
+              feature {
+                id
+                name
+                description
+                enabled
+              }
             }
           }
         `,
@@ -172,15 +203,18 @@ const createRunnBackend = (): FlagshipBackend => {
 
       return {
         total: 0,
-        items: body.data.features_accounts.map((feature: any) => ({
-          featureId: feature.feature_id,
-          accountId: feature.account_id,
-          enabled: feature.enabled,
-          createdAt: dateFns.parseISO(feature.created_at).getTime(),
-          updatedAt: dateFns.parseISO(feature.updated_at).getTime(),
+        items: body.data.features_accounts.map((featureAccount: any) => ({
+          id: featureAccount.feature.id,
+          name: featureAccount.feature.name,
+          description: featureAccount.feature.description,
+          enabled: featureAccount.enabled,
+          defaultEnabled: featureAccount.feature.enabled,
+          createdAt: dateFns.parseISO(featureAccount.created_at).getTime(),
+          updatedAt: dateFns.parseISO(featureAccount.updated_at).getTime(),
         })),
       }
     },
+
     async getAccountListForFeature({ featureId, enabled }) {
       const body = await graphql(
         `

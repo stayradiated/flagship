@@ -2,19 +2,19 @@ import type { V2_MetaFunction, LoaderFunction } from '@remix-run/node'
 import { json } from '@remix-run/node'
 import { useLoaderData } from '@remix-run/react'
 import { createRunnBackend } from '~/lib/runn.server'
-import type { AccountList } from '~/lib/types'
-import { AccountListPage } from '~/components/page/account-list'
+import type { FeatureList } from '~/lib/types'
+import { FeatureListPage } from '~/components/page/feature-list'
 import { authenticator } from '~/lib/auth.server'
 
 const meta: V2_MetaFunction = () => {
   return [
-    { title: 'Accounts • Flagship' },
+    { title: 'Features • Flagship' },
     { name: 'description', content: 'Manage Feature Flags' },
   ]
 }
 
 type LoaderData = {
-  accountList: AccountList
+  featureList: FeatureList
   pageIndex: number
   pageSize: number
 }
@@ -29,22 +29,22 @@ const loader: LoaderFunction = async ({ request }) => {
   const pageIndex = 1
   const pageSize = 10
 
-  const accountList = await backend.getAccountList({
+  const featureList = await backend.getFeatureList({
     take: pageSize,
     skip: (pageIndex - 1) * pageSize,
   })
 
-  return json<LoaderData>({ pageIndex, pageSize, accountList })
+  return json<LoaderData>({ pageIndex, pageSize, featureList })
 }
 
 const Route = () => {
-  const { accountList, pageIndex, pageSize } = useLoaderData<LoaderData>()
+  const { featureList, pageIndex, pageSize } = useLoaderData<LoaderData>()
 
   return (
-    <AccountListPage
+    <FeatureListPage
       pageIndex={pageIndex}
       pageSize={pageSize}
-      accountList={accountList}
+      featureList={featureList}
     />
   )
 }
