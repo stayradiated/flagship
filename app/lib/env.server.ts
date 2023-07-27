@@ -6,6 +6,7 @@ const getEnv = once(() => {
   const $env = z.object({
     GOOGLE_CLIENT_ID: z.string().min(1),
     GOOGLE_CLIENT_SECRET: z.string().min(1),
+    PUBLIC_URL: z.string().min(1),
   })
 
   const result = $env.safeParse(process.env)
@@ -25,6 +26,7 @@ const getEnv = once(() => {
   return {
     googleClientId: env.GOOGLE_CLIENT_ID,
     googleClientSecret: env.GOOGLE_CLIENT_SECRET,
+    publicUrl: env.PUBLIC_URL,
   }
 })
 

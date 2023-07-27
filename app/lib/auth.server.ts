@@ -13,7 +13,7 @@ const googleStrategy = new GoogleStrategy(
   {
     clientID: env.googleClientId,
     clientSecret: env.googleClientSecret,
-    callbackURL: 'http://localhost:3000/auth/google/callback',
+    callbackURL: `${env.publicUrl}/auth/google/callback`,
   },
   async ({ profile }) => {
     const userEmail = profile.emails[0].value
