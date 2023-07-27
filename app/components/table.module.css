@@ -5,11 +5,17 @@
 
 .table {
   width: 100%;
-  table-layout: fixed;
-  border-collapse: collapse;
+  position: relative;
+}
+
+.thead {
+  width: 100%;
+  position: relative;
+  height: 50px;
 }
 
 .th {
+  flex-grow: 1;
   text-align: left;
   font-size: var(--scale-1);
   line-height: var(--line-md);
@@ -17,12 +23,18 @@
 }
 
 .tr {
+  display: flex;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
 }
 .tr:nth-child(odd) {
   background: var(--color-grey-50);
 }
 
 .td {
+  flex-grow: 1;
   font-size: var(--scale-1);
   line-height: var(--line-md);
   padding: var(--size-2) 0;

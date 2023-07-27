@@ -3,7 +3,7 @@ import type {
   Table as TanstackReactTable,
   CellContext,
 } from '@tanstack/react-table'
-import { useVirtual } from 'react-virtual'
+import { useVirtualizer } from '@tanstack/react-virtual'
 import { useRef, useEffect, useCallback } from 'react'
 import styles from './table.module.css'
 
@@ -50,91 +50,85 @@ const Table = <Data,>(props: TableProps<Data>) => {
     fetchMoreOnBottomReached(tableContainerRef.current)
   }, [fetchMoreOnBottomReached])
 
-  const rowVirtualizer = useVirtual({
-    parentRef: tableContainerRef,
-    size: rows.length,
+  const rowVirtualizer = useVirtualizer({
+    count: rows.length,
+    getScrollElement: () => tableContainerRef.current,
+    estimateSize: () => 50,
     overscan: 10,
   })
 
-  const { virtualItems: virtualRows, totalSize } = rowVirtualizer
-
-  const paddingTop = virtualRows.length > 0 ? virtualRows?.[0]?.start || 0 : 0
-
-  const paddingBottom =
-    virtualRows.length > 0
-      ? totalSize - (virtualRows?.[virtualRows.length - 1]?.end || 0)
-      : 0
-
   return (
-    <div
-      className={styles.container}
-      onScroll={(e) => {
-        fetchMoreOnBottomReached(e.target as HTMLDivElement)
-      }}
-      ref={tableContainerRef}
-    >
-      <table className={styles.table}>
-        <thead>
-          {table.getHeaderGroups().map((headerGroup) => (
-            <tr key={headerGroup.id}>
-              {headerGroup.headers.map((header) => (
-                <th
-                  key={header.id}
-                  className={styles.th}
+    <>
+      <div className={styles.thead}>
+        {table.getHeaderGroups().map((headerGroup) => (
+          <div key={headerGroup.id} className={styles.tr}>
+            {headerGroup.headers.map((header) => (
+              <div
+                key={header.id}
+                className={styles.th}
+                style={{
+                  flexBasis: header.getSize(),
+                }}
+              >
+                {header.isPlaceholder
+                  ? null
+                  : flexRender(
+                      header.column.columnDef.header,
+                      header.getContext(),
+                    )}
+              </div>
+            ))}
+          </div>
+        ))}
+      </div>
+      <div
+        className={styles.container}
+        onScroll={(e) => {
+          fetchMoreOnBottomReached(e.target as HTMLDivElement)
+        }}
+        ref={tableContainerRef}
+      >
+        <div
+          className={styles.table}
+          style={{
+            height: `${rowVirtualizer.getTotalSize()}px`,
+          }}
+        >
+          <div className={styles.tbody}>
+            {rowVirtualizer.getVirtualItems().map((virtualItem) => {
+              const row = rows[virtualItem.index]
+              return (
+                <div
+                  key={virtualItem.key}
+                  className={styles.tr}
                   style={{
-                    width: header.getSize(),
+                    height: `${virtualItem.size}px`,
+                    transform: `translateY(${virtualItem.start}px)`,
                   }}
                 >
-                  {header.isPlaceholder
-                    ? null
-                    : flexRender(
-                        header.column.columnDef.header,
-                        header.getContext(),
-                      )}
-                </th>
-              ))}
-            </tr>
-          ))}
-        </thead>
-        <tbody>
-          {paddingTop > 0 && (
-            <tr>
-              <td style={{ height: `${paddingTop}px` }} />
-            </tr>
-          )}
-
-          {virtualRows.map((virtualRow) => {
-            const row = rows[virtualRow.index]
-            return (
-              <tr key={row.id} className={styles.tr}>
-                {row.getVisibleCells().map((cell) => {
-                  return (
-                    <td
-                      key={cell.id}
-                      className={styles.td}
-                      style={{
-                        width: cell.column.getSize(),
-                      }}
-                    >
-                      {flexRender(
-                        cell.column.columnDef.cell,
-                        cell.getContext(),
-                      )}
-                    </td>
-                  )
-                })}
-              </tr>
-            )
-          })}
-
-          {paddingBottom > 0 && (
-            <tr>
-              <td style={{ height: `${paddingBottom}px` }} />
-            </tr>
-          )}
-        </tbody>
-      </table>
-    </div>
+                  {row.getVisibleCells().map((cell) => {
+                    return (
+                      <div
+                        key={cell.id}
+                        className={styles.td}
+                        style={{
+                          flexBasis: cell.column.getSize(),
+                        }}
+                      >
+                        {flexRender(
+                          cell.column.columnDef.cell,
+                          cell.getContext(),
+                        )}
+                      </div>
+                    )
+                  })}
+                </div>
+              )
+            })}
+          </div>
+        </div>
+      </div>
+    </>
   )
 }
 
