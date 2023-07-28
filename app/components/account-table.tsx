@@ -4,7 +4,7 @@ import {
   getCoreRowModel,
   useReactTable,
 } from '@tanstack/react-table'
-import { Table, CellIdentifier, CellStrong } from './table'
+import { Table, CellIdentifier } from './table'
 import type { Account, AccountList } from '~/lib/types'
 
 const columnHelper = createColumnHelper<Account>()
@@ -13,11 +13,16 @@ const columns = [
   columnHelper.accessor('id', {
     header: 'ID',
     cell: CellIdentifier,
-    size: 10,
+    size: 1,
   }),
   columnHelper.accessor('name', {
     header: 'Name',
-    cell: CellStrong,
+    cell(info) {
+      return (
+        <Link to={`/accounts/${info.row.original.id}`}>{info.getValue()}</Link>
+      )
+    },
+    size: 6,
   }),
   columnHelper.accessor('labelList', {
     header: 'Labels',
@@ -27,13 +32,7 @@ const columns = [
           {label.name}: {label.value}
         </span>
       )),
-  }),
-  columnHelper.accessor('id', {
-    id: 'view',
-    header: '...',
-    cell(info) {
-      return <Link to={`/accounts/${info.getValue()}`}>View</Link>
-    },
+    size: 10,
   }),
 ]
 
@@ -51,11 +50,17 @@ const AccountTable = (props: AccountTableProps) => {
     data: accountList.items,
     columns,
     getCoreRowModel: getCoreRowModel<Account>(),
+    defaultColumn: {
+      minSize: 0,
+      size: 1,
+      maxSize: Number.MAX_SAFE_INTEGER,
+    },
   })
 
   return (
     <Table
       table={table}
+      totalRowCount={accountList.total}
       isFetching={isFetching}
       hasMore={hasMore}
       fetchNextPage={fetchNextPage}

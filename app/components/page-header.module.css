@@ -4,6 +4,7 @@
 }
 
 .title {
+  font-family: var(--font-sans);
   font-size: var(--scale-4);
   font-weight: var(--weight-bold);
   text-decoration: none;

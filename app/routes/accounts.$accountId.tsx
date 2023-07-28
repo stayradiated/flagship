@@ -3,11 +3,13 @@ import { json } from '@remix-run/node'
 import { useLoaderData } from '@remix-run/react'
 import { z } from 'zod'
 import { createRunnBackend } from '~/lib/runn.server'
-import type { Account, FeatureList } from '~/lib/types'
+import type { Account, FeatureList, User } from '~/lib/types'
 import { AccountPage } from '~/components/page/account'
 import { authenticator } from '~/lib/auth.server'
+import { defaultPageIndex, defaultPageSize } from '~/config'
 
 type LoaderData = {
+  user: User
   account: Account
   featureList: FeatureList
   pageIndex: number
@@ -27,7 +29,7 @@ const $LoaderParameters = z.object({
 })
 
 const loader: LoaderFunction = async ({ request, params }) => {
-  await authenticator.authenticate('google', request, {
+  const user = await authenticator.authenticate('google', request, {
     failureRedirect: '/login',
   })
 
@@ -35,19 +37,23 @@ const loader: LoaderFunction = async ({ request, params }) => {
 
   const backend = createRunnBackend()
 
-  const pageIndex = 1
-  const pageSize = 10
+  const pageIndex = defaultPageIndex
+  const pageSize = defaultPageSize
 
   const [account, featureList] = await Promise.all([
     backend.getAccount({ id: accountId }),
-    backend.getFeatureListForAccount({ accountId, take: 10, skip: 0 }),
+    backend.getFeatureListForAccount({
+      accountId,
+      take: pageSize,
+      skip: (pageIndex - 1) * pageSize,
+    }),
   ])
 
-  return json<LoaderData>({ account, featureList, pageIndex, pageSize })
+  return json<LoaderData>({ account, featureList, pageIndex, pageSize, user })
 }
 
 const Route = () => {
-  const { account, featureList, pageIndex, pageSize } =
+  const { user, account, featureList, pageIndex, pageSize } =
     useLoaderData<LoaderData>()
 
   return (
@@ -56,6 +62,7 @@ const Route = () => {
       featureList={featureList}
       pageIndex={pageIndex}
       pageSize={pageSize}
+      user={user}
     />
   )
 }

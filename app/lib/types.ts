@@ -7,6 +7,12 @@ export type PaginatedArgs = {
   skip: number
 }
 
+export type User = {
+  id: string
+  email: string
+  name: string
+}
+
 export type Feature = {
   id: string
   name: string

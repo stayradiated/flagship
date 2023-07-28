@@ -1,16 +1,18 @@
 import { PageHeader } from './page-header'
 import styles from './page.module.css'
+import type { User } from '~/lib/types'
 
 type PageProps = {
+  user?: User
   children: React.ReactNode
 }
 
 const Page = (props: PageProps) => {
-  const { children } = props
+  const { user, children } = props
 
   return (
     <main className={styles.container}>
-      <PageHeader />
+      <PageHeader user={user} />
 
       <div className={styles.hr} />
 

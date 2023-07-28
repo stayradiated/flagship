@@ -17,44 +17,24 @@ const CellStrong = <Data,>(info: CellContext<Data, React.ReactNode>) => (
 
 type TableProps<Data> = {
   table: TanstackReactTable<Data>
+  totalRowCount: number
   isFetching: boolean
   hasMore: boolean
   fetchNextPage: () => void
 }
 
 const Table = <Data,>(props: TableProps<Data>) => {
-  const { table, isFetching, hasMore, fetchNextPage } = props
+  const { table, totalRowCount, isFetching, hasMore, fetchNextPage } = props
 
   const { rows } = table.getRowModel()
 
   const tableContainerRef = useRef<HTMLDivElement>(null)
 
-  const fetchMoreOnBottomReached = useCallback(
-    (containerRefElement?: HTMLDivElement | null) => {
-      if (containerRefElement) {
-        const { scrollHeight, scrollTop, clientHeight } = containerRefElement
-        if (
-          scrollHeight - scrollTop - clientHeight < 30 &&
-          !isFetching &&
-          hasMore
-        ) {
-          fetchNextPage()
-        }
-      }
-    },
-    [fetchNextPage, isFetching, hasMore],
-  )
-
-  // A check on mount and after a fetch to see if the table is already scrolled to the bottom and immediately needs to fetch more data
-  useEffect(() => {
-    fetchMoreOnBottomReached(tableContainerRef.current)
-  }, [fetchMoreOnBottomReached])
-
   const rowVirtualizer = useVirtualizer({
-    count: rows.length,
+    count: totalRowCount,
     getScrollElement: () => tableContainerRef.current,
-    estimateSize: () => 50,
-    overscan: 10,
+    estimateSize: () => 38,
+    overscan: 30,
   })
 
   return (
@@ -67,7 +47,7 @@ const Table = <Data,>(props: TableProps<Data>) => {
                 key={header.id}
                 className={styles.th}
                 style={{
-                  flexBasis: header.getSize(),
+                  flex: header.getSize(),
                 }}
               >
                 {header.isPlaceholder
@@ -81,22 +61,17 @@ const Table = <Data,>(props: TableProps<Data>) => {
           </div>
         ))}
       </div>
-      <div
-        className={styles.container}
-        onScroll={(e) => {
-          fetchMoreOnBottomReached(e.target as HTMLDivElement)
-        }}
-        ref={tableContainerRef}
-      >
+      <div className={styles.container} ref={tableContainerRef}>
         <div
           className={styles.table}
           style={{
             height: `${rowVirtualizer.getTotalSize()}px`,
           }}
         >
-          <div className={styles.tbody}>
-            {rowVirtualizer.getVirtualItems().map((virtualItem) => {
-              const row = rows[virtualItem.index]
+          {rowVirtualizer.getVirtualItems().map((virtualItem) => {
+            const row = rows[virtualItem.index]
+
+            if (!row) {
               return (
                 <div
                   key={virtualItem.key}
@@ -105,27 +80,38 @@ const Table = <Data,>(props: TableProps<Data>) => {
                     height: `${virtualItem.size}px`,
                     transform: `translateY(${virtualItem.start}px)`,
                   }}
-                >
-                  {row.getVisibleCells().map((cell) => {
-                    return (
-                      <div
-                        key={cell.id}
-                        className={styles.td}
-                        style={{
-                          flexBasis: cell.column.getSize(),
-                        }}
-                      >
-                        {flexRender(
-                          cell.column.columnDef.cell,
-                          cell.getContext(),
-                        )}
-                      </div>
-                    )
-                  })}
-                </div>
+                />
               )
-            })}
-          </div>
+            }
+
+            return (
+              <div
+                key={virtualItem.key}
+                className={styles.tr}
+                style={{
+                  height: `${virtualItem.size}px`,
+                  transform: `translateY(${virtualItem.start}px)`,
+                }}
+              >
+                {row.getVisibleCells().map((cell) => {
+                  return (
+                    <div
+                      key={cell.id}
+                      className={styles.td}
+                      style={{
+                        flex: cell.column.getSize(),
+                      }}
+                    >
+                      {flexRender(
+                        cell.column.columnDef.cell,
+                        cell.getContext(),
+                      )}
+                    </div>
+                  )
+                })}
+              </div>
+            )
+          })}
         </div>
       </div>
     </>

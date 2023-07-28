@@ -1,0 +1,14 @@
+.name {
+  font-weight: var(--weight-semibold);
+  color: var(--color-blue-700);
+  text-decoration: none;
+}
+.name:hover {
+  text-decoration: underline;
+  color: var(--color-blue-500);
+}
+
+.date {
+  display: block;
+  text-align: right;
+}

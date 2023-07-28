@@ -180,18 +180,23 @@ const createRunnBackend = (): FlagshipBackend => {
       const body = await graphql(
         `
           query ($accountId: Int!) {
-            features_accounts(
-              where: { account_id: { _eq: $accountId } }
-              order_by: { created_at: asc }
-            ) {
+            features(order_by: { created_at: asc }) {
+              id
+              name
+              description
               enabled
               created_at
               updated_at
-              feature {
-                id
-                name
-                description
+
+              features_accounts(where: { account_id: { _eq: $accountId } }) {
                 enabled
+                created_at
+                updated_at
+              }
+            }
+            features_aggregate {
+              aggregate {
+                count
               }
             }
           }
@@ -202,16 +207,24 @@ const createRunnBackend = (): FlagshipBackend => {
       )
 
       return {
-        total: 0,
-        items: body.data.features_accounts.map((featureAccount: any) => ({
-          id: featureAccount.feature.id,
-          name: featureAccount.feature.name,
-          description: featureAccount.feature.description,
-          enabled: featureAccount.enabled,
-          defaultEnabled: featureAccount.feature.enabled,
-          createdAt: dateFns.parseISO(featureAccount.created_at).getTime(),
-          updatedAt: dateFns.parseISO(featureAccount.updated_at).getTime(),
-        })),
+        total: body.data.features_aggregate.aggregate.count,
+        items: body.data.features.map((feature: any) => {
+          const featureAccount = feature.features_accounts[0]
+
+          return {
+            id: feature.id,
+            name: feature.name,
+            description: feature.description,
+            defaultEnabled: feature.enabled,
+            enabled: featureAccount ? featureAccount.enabled : feature.enabled,
+            createdAt: featureAccount
+              ? dateFns.parseISO(featureAccount.created_at).getTime()
+              : dateFns.parseISO(feature.created_at).getTime(),
+            updatedAt: featureAccount
+              ? dateFns.parseISO(featureAccount.updated_at).getTime()
+              : dateFns.parseISO(feature.updated_at).getTime(),
+          }
+        }),
       }
     },
 
@@ -232,6 +245,18 @@ const createRunnBackend = (): FlagshipBackend => {
               name
               account_type
             }
+            accounts_aggregate(
+              where: {
+                features_accounts: {
+                  feature_id: { _eq: $featureId }
+                  enabled: { _eq: $enabled }
+                }
+              }
+            ) {
+              aggregate {
+                count
+              }
+            }
           }
         `,
         {
@@ -241,7 +266,7 @@ const createRunnBackend = (): FlagshipBackend => {
       )
 
       return {
-        total: 0,
+        total: body.data.accounts_aggregate.aggregate.count,
         items: body.data.accounts.map((account: any) => ({
           id: account.id,
           name: account.name,

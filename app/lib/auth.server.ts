@@ -2,10 +2,7 @@ import { Authenticator } from 'remix-auth'
 import { GoogleStrategy } from 'remix-auth-google'
 import { getEnv } from './env.server'
 import { sessionStorage } from '~/lib/session.server'
-
-type User = {
-  id: string
-}
+import { type User } from '~/lib/types'
 
 const env = getEnv()
 
@@ -16,14 +13,13 @@ const googleStrategy = new GoogleStrategy(
     callbackURL: `${env.publicUrl}/auth/google/callback`,
   },
   async ({ profile }) => {
-    const userEmail = profile.emails[0].value
-
-    console.log({ userEmail })
-
-    // Get the user data from your DB or API using the tokens and profile
-    return {
-      id: userEmail,
+    const user: User = {
+      id: profile.id,
+      name: profile.displayName,
+      email: profile.emails[0].value,
     }
+
+    return user
   },
 )
 

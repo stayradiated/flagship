@@ -2,9 +2,10 @@ import type { V2_MetaFunction, LoaderFunction } from '@remix-run/node'
 import { json } from '@remix-run/node'
 import { useLoaderData } from '@remix-run/react'
 import { createRunnBackend } from '~/lib/runn.server'
-import type { FeatureList } from '~/lib/types'
+import type { FeatureList, User } from '~/lib/types'
 import { FeatureListPage } from '~/components/page/feature-list'
 import { authenticator } from '~/lib/auth.server'
+import { defaultPageIndex, defaultPageSize } from '~/config'
 
 const meta: V2_MetaFunction = () => {
   return [
@@ -17,34 +18,36 @@ type LoaderData = {
   featureList: FeatureList
   pageIndex: number
   pageSize: number
+  user: User
 }
 
 const loader: LoaderFunction = async ({ request }) => {
-  await authenticator.authenticate('google', request, {
+  const user = await authenticator.authenticate('google', request, {
     failureRedirect: '/login',
   })
 
   const backend = createRunnBackend()
 
-  const pageIndex = 1
-  const pageSize = 10
+  const pageIndex = defaultPageIndex
+  const pageSize = defaultPageSize
 
   const featureList = await backend.getFeatureList({
     take: pageSize,
     skip: (pageIndex - 1) * pageSize,
   })
 
-  return json<LoaderData>({ pageIndex, pageSize, featureList })
+  return json<LoaderData>({ pageIndex, pageSize, featureList, user })
 }
 
 const Route = () => {
-  const { featureList, pageIndex, pageSize } = useLoaderData<LoaderData>()
+  const { featureList, pageIndex, pageSize, user } = useLoaderData<LoaderData>()
 
   return (
     <FeatureListPage
       pageIndex={pageIndex}
       pageSize={pageSize}
       featureList={featureList}
+      user={user}
     />
   )
 }

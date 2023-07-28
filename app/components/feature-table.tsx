@@ -5,7 +5,8 @@ import {
   getCoreRowModel,
   useReactTable,
 } from '@tanstack/react-table'
-import { Table, CellStrong } from './table'
+import { Table } from './table'
+import styles from './feature-table.module.css'
 import type { Feature, FeatureList } from '~/lib/types'
 
 const columnHelper = createColumnHelper<Feature>()
@@ -22,33 +23,33 @@ const columns = [
         />
       )
     },
-    size: 10,
+    size: 1,
   }),
   columnHelper.accessor('name', {
     header: 'Name',
-    cell: CellStrong,
-    size: 30,
+    cell: (info) => (
+      <Link to={`/features/${info.row.original.id}`} className={styles.name}>
+        {info.getValue()}
+      </Link>
+    ),
+    size: 6,
   }),
   columnHelper.accessor('description', {
     header: 'Description',
-    size: 60,
+    size: 20,
   }),
-  columnHelper.accessor('createdAt', {
-    header: 'Created At',
-    cell(info) {
-      const createdAt = dateFns.toDate(info.getValue())
+  columnHelper.accessor(
+    (row) => {
+      const createdAt = dateFns.toDate(row.createdAt)
       return dateFns.format(createdAt, 'dd MMM yyyy')
     },
-    size: 30,
-  }),
-  columnHelper.accessor('id', {
-    id: 'view',
-    header: '...',
-    cell(info) {
-      return <Link to={`/features/${info.getValue()}`}>View</Link>
+    {
+      id: 'created-at',
+      header: 'Created At',
+      cell: (info) => <span className={styles.date}>{info.getValue()}</span>,
+      size: 3,
     },
-    size: 0,
-  }),
+  ),
 ]
 
 type FeatureTableProps = {
@@ -65,11 +66,17 @@ const FeatureTable = (props: FeatureTableProps) => {
     data: featureList.items,
     columns,
     getCoreRowModel: getCoreRowModel<Feature>(),
+    defaultColumn: {
+      minSize: 0,
+      size: 1,
+      maxSize: Number.MAX_SAFE_INTEGER,
+    },
   })
 
   return (
     <Table
       table={table}
+      totalRowCount={featureList.total}
       isFetching={isFetching}
       hasMore={hasMore}
       fetchNextPage={fetchNextPage}

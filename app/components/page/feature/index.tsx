@@ -1,10 +1,11 @@
 import { useInfiniteQuery } from '@tanstack/react-query'
 import { useMemo } from 'react'
-import type { Feature, AccountList } from '~/lib/types'
+import type { Feature, AccountList, User } from '~/lib/types'
 import { Page } from '~/components/page'
 import { AccountTable } from '~/components/account-table'
 
 type FeaturePageProps = {
+  user: User
   pageIndex: number
   pageSize: number
   feature: Feature
@@ -12,7 +13,7 @@ type FeaturePageProps = {
 }
 
 const FeaturePage = (props: FeaturePageProps) => {
-  const { pageIndex, pageSize, feature, accountList } = props
+  const { user, pageIndex, pageSize, feature, accountList } = props
 
   const { data, fetchNextPage, isFetching } = useInfiniteQuery<{
     pageSize: number
@@ -23,7 +24,7 @@ const FeaturePage = (props: FeaturePageProps) => {
     async queryFn({ pageParam: pageParameter = 1 }) {
       console.log(`Fetching page ${pageParameter}`)
       const response = await fetch(
-        `/api/accounts/${feature.id}?i=${pageParameter}`,
+        `/api/accounts/${feature.id}?i=${pageParameter}&s=${pageSize}`,
       )
       const body = await response.json()
       return body
@@ -51,9 +52,8 @@ const FeaturePage = (props: FeaturePageProps) => {
 
   return (
     <>
-      <Page>
-        <h1>🚩 Feature</h1>
-        <h2>{feature.name}</h2>
+      <Page user={user}>
+        <h2>🚩 {feature.name}</h2>
         <AccountTable
           accountList={accountList}
           isFetching={isFetching}

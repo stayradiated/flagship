@@ -13,8 +13,8 @@ type LoaderData = {
 }
 
 const $LoaderSearchParameters = zfd.formData({
-  i: zfd.numeric(z.number().int().min(1).default(1)),
-  s: zfd.numeric(z.number().int().min(1).max(100).default(10)),
+  i: zfd.numeric(z.number().int().min(1)),
+  s: zfd.numeric(z.number().int().min(1).max(100)),
 })
 
 const $LoaderParameters = z.object({

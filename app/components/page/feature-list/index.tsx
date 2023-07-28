@@ -1,6 +1,7 @@
 import { useMemo } from 'react'
 import { useInfiniteQuery } from '@tanstack/react-query'
-import type { FeatureList } from '~/lib/types'
+import styles from './index.module.css'
+import type { FeatureList, User } from '~/lib/types'
 import { Page } from '~/components/page'
 import { FeatureTable } from '~/components/feature-table'
 
@@ -8,10 +9,11 @@ type FeatureListPageProps = {
   pageIndex: number
   pageSize: number
   featureList: FeatureList
+  user: User
 }
 
 const FeatureListPage = (props: FeatureListPageProps) => {
-  const { pageIndex, pageSize, featureList } = props
+  const { user, pageIndex, pageSize, featureList } = props
 
   const { data, fetchNextPage, isFetching } = useInfiniteQuery<{
     pageSize: number
@@ -21,7 +23,9 @@ const FeatureListPage = (props: FeatureListPageProps) => {
     queryKey: ['feature-list-page'],
     async queryFn({ pageParam: pageParameter = 1 }) {
       console.log(`Fetching page ${pageParameter}`)
-      const response = await fetch(`/api/features?i=${pageParameter}`)
+      const response = await fetch(
+        `/api/features?i=${pageParameter}&s=${pageSize}`,
+      )
       const body = await response.json()
       return body
     },
@@ -48,8 +52,8 @@ const FeatureListPage = (props: FeatureListPageProps) => {
 
   return (
     <>
-      <Page>
-        <h2>Feature List</h2>
+      <Page user={user}>
+        <h2 className={styles.title}>Feature List</h2>
         <FeatureTable
           featureList={{
             items: flatData,
