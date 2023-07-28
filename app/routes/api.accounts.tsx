@@ -15,6 +15,7 @@ type LoaderData = {
 const $LoaderSearchParameters = zfd.formData({
   i: zfd.numeric(z.number().int().min(1)),
   s: zfd.numeric(z.number().int().min(1).max(100)),
+  search: zfd.text(z.string().optional()),
 })
 
 const loader: LoaderFunction = async ({ request }) => {
@@ -23,13 +24,16 @@ const loader: LoaderFunction = async ({ request }) => {
   })
 
   const url = new URL(request.url)
-  const { i: pageIndex, s: pageSize } = $LoaderSearchParameters.parse(
-    url.searchParams,
-  )
+  const {
+    i: pageIndex,
+    s: pageSize,
+    search,
+  } = $LoaderSearchParameters.parse(url.searchParams)
 
   const backend = createRunnBackend()
 
   const accountList = await backend.getAccountList({
+    search,
     take: pageSize,
     skip: (pageIndex - 1) * pageSize,
   })

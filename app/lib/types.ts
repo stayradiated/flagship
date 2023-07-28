@@ -40,7 +40,11 @@ export type AccountList = PaginatedList<Account>
 export type GetFeatureListFn = (args: PaginatedArgs) => Promise<FeatureList>
 export type GetFeatureFn = (options: { id: string }) => Promise<Feature>
 
-export type GetAccountListFn = (args: PaginatedArgs) => Promise<AccountList>
+export type GetAccountListFn = (
+  args: PaginatedArgs & {
+    search?: string
+  },
+) => Promise<AccountList>
 export type GetAccountFn = (options: { id: string }) => Promise<Account>
 
 export type GetFeatureListForAccountFn = (

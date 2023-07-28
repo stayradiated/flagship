@@ -97,16 +97,21 @@ const createRunnBackend = (): FlagshipBackend => {
         updatedAt: dateFns.parseISO(feature.updated_at).getTime(),
       }
     },
-    async getAccountList({ take, skip }) {
+    async getAccountList({ search, take, skip }) {
       const body = await graphql(
         `
-          query ($take: Int!, $skip: Int!) {
-            accounts(order_by: { id: asc }, limit: $take, offset: $skip) {
+          query ($take: Int!, $skip: Int!, $search: String!) {
+            accounts(
+              where: { name: { _ilike: $search } }
+              order_by: { id: asc }
+              limit: $take
+              offset: $skip
+            ) {
               id
               name
               account_type
             }
-            accounts_aggregate {
+            accounts_aggregate(where: { name: { _ilike: $search } }) {
               aggregate {
                 count
               }
@@ -116,6 +121,7 @@ const createRunnBackend = (): FlagshipBackend => {
         {
           take,
           skip,
+          search: search ? `%${search}%` : '%',
         },
       )
 

@@ -1,5 +1,6 @@
 import { useInfiniteQuery } from '@tanstack/react-query'
 import { useMemo } from 'react'
+import { Form } from '@remix-run/react'
 import styles from './index.module.css'
 import type { AccountList, User } from '~/lib/types'
 import { Page } from '~/components/page'
@@ -10,10 +11,11 @@ type AccountListPageProps = {
   pageIndex: number
   pageSize: number
   user: User
+  search?: string
 }
 
 const AccountListPage = (props: AccountListPageProps) => {
-  const { accountList, pageIndex, pageSize, user } = props
+  const { accountList, pageIndex, pageSize, user, search } = props
 
   const { data, fetchNextPage, isFetching } = useInfiniteQuery<{
     pageSize: number
@@ -24,7 +26,7 @@ const AccountListPage = (props: AccountListPageProps) => {
     async queryFn({ pageParam: pageParameter = 1 }) {
       console.log(`Fetching page ${pageParameter}`)
       const response = await fetch(
-        `/api/accounts?i=${pageParameter}&s=${pageSize}`,
+        `/api/accounts?i=${pageParameter}&s=${pageSize}&search=${search ?? ''}`,
       )
       const body = await response.json()
       return body
@@ -54,6 +56,12 @@ const AccountListPage = (props: AccountListPageProps) => {
     <>
       <Page user={user}>
         <h2 className={styles.title}>Account List</h2>
+
+        <Form method="GET">
+          <input type="search" name="search" defaultValue={search} />
+          <button>Search</button>
+        </Form>
+
         <AccountTable
           accountList={{
             items: flatData,
