@@ -3,6 +3,7 @@ import {
   getInitialState,
   fetchList,
   rangeContainsPoint,
+  rangeLength,
 } from '@stayradiated/mandarin'
 import type { Feature, FeatureList } from '~/lib/types'
 
@@ -21,7 +22,7 @@ const useStore = create<Store>((set, get) => ({
     set((state) => ({
       ...state,
       valueList: featureList.items,
-      fetchedSet: new Set([[0, featureList.items.length - 1]]),
+      fetchedSet: new Set([[0, featureList.items.length]]),
       total: featureList.total,
     }))
   },
@@ -39,13 +40,10 @@ const useStore = create<Store>((set, get) => ({
       },
       range: [start, end],
       async fetch(range) {
-        const take = range[1] - range[0] + 1
+        const take = rangeLength(range)
         const skip = range[0]
-        const search = ''
 
-        const response = await fetch(
-          `/api/features?skip=${skip}&take=${take}&search=${search ?? ''}`,
-        )
+        const response = await fetch(`/api/features?skip=${skip}&take=${take}`)
         const body = await response.json()
 
         return {

@@ -26,7 +26,7 @@ const loader: LoaderFunction = async ({ request }) => {
   const backend = createRunnBackend()
 
   const featureList = await backend.getFeatureList({
-    take: 5,
+    take: 30,
     skip: 0,
   })
 

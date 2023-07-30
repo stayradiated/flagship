@@ -2,6 +2,7 @@ import { create } from 'zustand'
 import {
   getInitialState,
   fetchList,
+  rangeLength,
   rangeContainsPoint,
 } from '@stayradiated/mandarin'
 import type { Account, AccountList } from '~/lib/types'
@@ -9,6 +10,8 @@ import type { Account, AccountList } from '~/lib/types'
 type State = ReturnType<typeof getInitialState<Account>>
 
 type Store = State & {
+  search: string
+
   init: (accountList: AccountList) => void
   isLoaded: (index: number) => boolean
   loadRange: (start: number, end: number) => Promise<void>
@@ -17,11 +20,13 @@ type Store = State & {
 const useStore = create<Store>((set, get) => ({
   ...getInitialState(),
 
+  search: '',
+
   init(accountList: AccountList) {
     set((state) => ({
       ...state,
       valueList: accountList.items,
-      fetchedSet: new Set([[0, accountList.items.length - 1]]),
+      fetchedSet: new Set([[0, accountList.items.length]]),
       total: accountList.total,
     }))
   },
@@ -32,19 +37,18 @@ const useStore = create<Store>((set, get) => ({
   },
 
   async loadRange(start, end) {
+    const { search } = get()
+
     await fetchList<Account>({
-      getState: () => get(),
-      setState(state: State) {
-        set(state)
-      },
+      getState: get,
+      setState: set,
       range: [start, end],
       async fetch(range) {
-        const take = range[1] - range[0] + 1
+        const take = rangeLength(range)
         const skip = range[0]
-        const search = ''
 
         const response = await fetch(
-          `/api/accounts?skip=${skip}&take=${take}&search=${search ?? ''}`,
+          `/api/accounts?skip=${skip}&take=${take}&search=${search}`,
         )
         const body = await response.json()
 

@@ -3,6 +3,7 @@ import {
   getInitialState,
   fetchList,
   rangeContainsPoint,
+  rangeLength,
 } from '@stayradiated/mandarin'
 import type { Account, AccountList } from '~/lib/types'
 
@@ -26,7 +27,7 @@ const useStore = create<Store>((set, get) => ({
       ...state,
       featureId,
       valueList: accountList.items,
-      fetchedSet: new Set([[0, accountList.items.length - 1]]),
+      fetchedSet: new Set([[0, accountList.items.length]]),
       total: accountList.total,
     }))
   },
@@ -49,14 +50,11 @@ const useStore = create<Store>((set, get) => ({
       },
       range: [start, end],
       async fetch(range) {
-        const take = range[1] - range[0] + 1
+        const take = rangeLength(range)
         const skip = range[0]
-        const search = ''
 
         const response = await fetch(
-          `/api/accounts?featureId=${featureId}&skip=${skip}&take=${take}&search=${
-            search ?? ''
-          }`,
+          `/api/accounts?featureId=${featureId}&skip=${skip}&take=${take}`,
         )
         const body = await response.json()
 

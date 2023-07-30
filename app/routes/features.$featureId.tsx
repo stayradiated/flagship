@@ -39,7 +39,7 @@ const loader: LoaderFunction = async ({ request, params }) => {
     backend.getAccountListForFeature({
       featureId,
       enabled: true,
-      take: 50,
+      take: 30,
       skip: 0,
     }),
   ])

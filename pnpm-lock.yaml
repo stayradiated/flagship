@@ -23,8 +23,8 @@ dependencies:
     specifier: 1.19.1
     version: 1.19.1
   '@stayradiated/mandarin':
-    specifier: 4.1.0
-    version: 4.1.0
+    specifier: 4.2.0
+    version: 4.2.0
   classcat:
     specifier: 5.0.4
     version: 5.0.4
@@ -2229,8 +2229,8 @@ packages:
     engines: {node: '>=10'}
     dev: true
 
-  /@stayradiated/mandarin@4.1.0:
-    resolution: {integrity: sha512-PssLonEr1irOjEsxEx2OrTcZjm1KeSNw1F1jlV3CwKA+flOSsWMNsnSTWOuMcksDHoxW9MRoQFIVEb0r9zynuQ==}
+  /@stayradiated/mandarin@4.2.0:
+    resolution: {integrity: sha512-5JFIW1Df26W+NCN/xQzNbJ8M/nf4rXTUIZPRNj/Cy1IhFfuUrsIzJErnYlV+wMM+SIgx0Uui16SfRKkiCNlZcA==}
     dependencies:
       immer: 10.0.2
       piratemap: 5.0.0

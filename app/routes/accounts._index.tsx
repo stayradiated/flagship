@@ -37,7 +37,7 @@ const loader: LoaderFunction = async ({ request }) => {
 
   const accountList = await backend.getAccountList({
     search,
-    take: 50,
+    take: 30,
     skip: 0,
   })
 
