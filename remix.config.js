@@ -14,5 +14,10 @@ module.exports = {
     v2_normalizeFormMethod: true,
     v2_routeConvention: true,
   },
-  serverDependenciesToBundle: ['@stayradiated/mandarin', 'piratemap']
+  serverDependenciesToBundle: [
+    '@stayradiated/mandarin',
+      'piratemap',
+
+    'p-debounce'
+  ]
 }

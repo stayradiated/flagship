@@ -1,10 +1,10 @@
 import { useEffect } from 'react'
-import { Form } from '@remix-run/react'
 import styles from './index.module.css'
 import { useStore } from './store.js'
 import type { AccountList, User } from '~/lib/types'
 import { Page } from '~/components/page'
 import { AccountTable } from '~/components/account-table'
+import { SearchInput } from '~/components/search-input'
 
 type AccountListPageProps = {
   accountList: AccountList
@@ -13,12 +13,12 @@ type AccountListPageProps = {
 }
 
 const AccountListPage = (props: AccountListPageProps) => {
-  const { accountList, user, search } = props
+  const { accountList, user, search = '' } = props
 
   const store = useStore()
 
   useEffect(() => {
-    store.init(accountList)
+    store.init(accountList, search)
   }, [])
 
   return (
@@ -26,10 +26,16 @@ const AccountListPage = (props: AccountListPageProps) => {
       <Page user={user}>
         <h2 className={styles.title}>Account List</h2>
 
-        <Form method="GET">
-          <input type="search" name="search" defaultValue={search} />
-          <button>Search</button>
-        </Form>
+        <SearchInput
+          defaultValue={search}
+          onChange={(query) => {
+            store.setSearch(query)
+          }}
+        />
+
+        {store.total === 0 && (
+          <p className={styles.noResult}>No accounts found…</p>
+        )}
 
         <AccountTable
           rows={store.valueList}

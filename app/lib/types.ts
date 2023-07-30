@@ -37,7 +37,11 @@ export type Account = {
 export type FeatureList = PaginatedList<Feature>
 export type AccountList = PaginatedList<Account>
 
-export type GetFeatureListFn = (args: PaginatedArgs) => Promise<FeatureList>
+export type GetFeatureListFn = (
+  args: PaginatedArgs & {
+    search?: string
+  },
+) => Promise<FeatureList>
 export type GetFeatureFn = (options: { id: string }) => Promise<Feature>
 
 export type GetAccountListFn = (

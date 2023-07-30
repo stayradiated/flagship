@@ -151,11 +151,12 @@ const createRunnBackend = (): FlagshipBackend => {
         })),
       }
     },
-    async getFeatureList({ take, skip }) {
+    async getFeatureList({ take, skip, search }) {
       const body = await graphql(
         `
-          query ($take: Int!, $skip: Int!) {
+          query ($take: Int!, $skip: Int!, $search: String!) {
             features(
+              where: { name: { _ilike: $search } }
               order_by: { created_at: asc }
               limit: $take
               offset: $skip
@@ -167,7 +168,7 @@ const createRunnBackend = (): FlagshipBackend => {
               created_at
               updated_at
             }
-            features_aggregate {
+            features_aggregate(where: { name: { _ilike: $search } }) {
               aggregate {
                 count
               }
@@ -177,6 +178,7 @@ const createRunnBackend = (): FlagshipBackend => {
         {
           take,
           skip,
+          search: search ? `%${search}%` : '%',
         },
       )
 

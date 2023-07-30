@@ -48,6 +48,8 @@ const loader: LoaderFunction = async ({ request }) => {
 const Route = () => {
   const { accountList, user, search } = useLoaderData<LoaderData>()
 
+  console.log({ search })
+
   return (
     <AccountListPage accountList={accountList} user={user} search={search} />
   )

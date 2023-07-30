@@ -8,11 +8,11 @@ import {
 import type { Account, AccountList } from '~/lib/types'
 
 type State = ReturnType<typeof getInitialState<Account>>
-
 type Store = State & {
   search: string
 
-  init: (accountList: AccountList) => void
+  setSearch: (search: string) => void
+  init: (accountList: AccountList, seach: string) => void
   isLoaded: (index: number) => boolean
   loadRange: (start: number, end: number) => Promise<void>
 }
@@ -22,13 +22,26 @@ const useStore = create<Store>((set, get) => ({
 
   search: '',
 
-  init(accountList: AccountList) {
+  init(accountList: AccountList, search: string) {
     set((state) => ({
       ...state,
+      search,
       valueList: accountList.items,
       fetchedSet: new Set([[0, accountList.items.length]]),
       total: accountList.total,
     }))
+  },
+
+  setSearch(search: string) {
+    const { searchParams } = new URL(window.location.href)
+    searchParams.set('search', search)
+    window.history.replaceState(null, '', `?${searchParams.toString()}`)
+
+    set({
+      search,
+      fetchedSet: new Set(),
+    })
+    this.loadRange(0, 30)
   },
 
   isLoaded(index) {
@@ -36,7 +49,9 @@ const useStore = create<Store>((set, get) => ({
     return fetchedRangeList.some((range) => rangeContainsPoint(range, index))
   },
 
-  async loadRange(start, end) {
+  async loadRange(start, endInclusive) {
+    const end = endInclusive + 1
+
     const { search } = get()
 
     await fetchList<Account>({

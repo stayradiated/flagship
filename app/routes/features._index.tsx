@@ -1,6 +1,8 @@
 import type { V2_MetaFunction, LoaderFunction } from '@remix-run/node'
 import { json } from '@remix-run/node'
 import { useLoaderData } from '@remix-run/react'
+import { zfd } from 'zod-form-data'
+import { z } from 'zod'
 import { createRunnBackend } from '~/lib/runn.server'
 import type { FeatureList, User } from '~/lib/types'
 import { FeatureListPage } from '~/components/page/feature-list'
@@ -16,7 +18,12 @@ const meta: V2_MetaFunction = () => {
 type LoaderData = {
   featureList: FeatureList
   user: User
+  search?: string
 }
+
+const $LoaderSearchParameters = zfd.formData({
+  search: zfd.text(z.string().optional()),
+})
 
 const loader: LoaderFunction = async ({ request }) => {
   const backend = createRunnBackend()
@@ -26,18 +33,24 @@ const loader: LoaderFunction = async ({ request }) => {
     failureRedirect: '/login',
   })
 
+  const url = new URL(request.url)
+  const { search } = $LoaderSearchParameters.parse(url.searchParams)
+
   const featureList = await backend.getFeatureList({
+    search,
     take: 30,
     skip: 0,
   })
 
-  return json<LoaderData>({ featureList, user })
+  return json<LoaderData>({ featureList, user, search })
 }
 
 const Route = () => {
-  const { featureList, user } = useLoaderData<LoaderData>()
+  const { featureList, user, search } = useLoaderData<LoaderData>()
 
-  return <FeatureListPage featureList={featureList} user={user} />
+  return (
+    <FeatureListPage featureList={featureList} user={user} search={search} />
+  )
 }
 
 export { meta, loader }

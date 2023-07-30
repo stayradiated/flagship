@@ -21,6 +21,7 @@
     "date-fns": "2.30.0",
     "isbot": "3.6.13",
     "normalize.css": "8.0.1",
+    "p-debounce": "4.0.0",
     "react": "18.2.0",
     "react-dom": "18.2.0",
     "react-virtualized-auto-sizer": "1.0.20",

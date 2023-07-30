@@ -37,7 +37,9 @@ const useStore = create<Store>((set, get) => ({
     return fetchedRangeList.some((range) => rangeContainsPoint(range, index))
   },
 
-  async loadRange(start, end) {
+  async loadRange(start, endInclusive) {
+    const end = endInclusive + 1
+
     const { featureId } = get()
     if (typeof featureId !== 'string') {
       throw new TypeError('featureId is not set')

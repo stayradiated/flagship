@@ -14,6 +14,7 @@ const $LoaderSearchParameters = zfd.formData({
   skip: zfd.numeric(z.number().int().min(0)),
   take: zfd.numeric(z.number().int().min(1).max(100)),
 
+  search: zfd.text(z.string().optional()),
   accountId: zfd.text(z.string().optional()),
 })
 
@@ -26,7 +27,7 @@ const loader: LoaderFunction = async ({ request }) => {
   })
 
   const url = new URL(request.url)
-  const { take, skip, accountId } = $LoaderSearchParameters.parse(
+  const { take, skip, search, accountId } = $LoaderSearchParameters.parse(
     url.searchParams,
   )
 
@@ -39,6 +40,7 @@ const loader: LoaderFunction = async ({ request }) => {
     : await backend.getFeatureList({
         take,
         skip,
+        search,
       })
 
   return json<LoaderData>({ featureList })
