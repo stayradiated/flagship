@@ -1,64 +1,33 @@
-import { useInfiniteQuery } from '@tanstack/react-query'
-import { useMemo } from 'react'
+import { useEffect } from 'react'
+import { useStore } from './store.js'
 import type { Feature, AccountList, User } from '~/lib/types'
 import { Page } from '~/components/page'
 import { AccountTable } from '~/components/account-table'
 
 type FeaturePageProps = {
   user: User
-  pageIndex: number
-  pageSize: number
   feature: Feature
   accountList: AccountList
 }
 
 const FeaturePage = (props: FeaturePageProps) => {
-  const { user, pageIndex, pageSize, feature, accountList } = props
+  const { user, feature, accountList } = props
 
-  const { data, fetchNextPage, isFetching } = useInfiniteQuery<{
-    pageSize: number
-    pageIndex: number
-    accountList: AccountList
-  }>({
-    queryKey: ['feature-page'],
-    async queryFn({ pageParam: pageParameter = 1 }) {
-      console.log(`Fetching page ${pageParameter}`)
-      const response = await fetch(
-        `/api/accounts/${feature.id}?i=${pageParameter}&s=${pageSize}`,
-      )
-      const body = await response.json()
-      return body
-    },
-    initialData: () => ({
-      pages: [{ pageIndex, pageSize, accountList }],
-      pageParams: [undefined, pageIndex],
-    }),
-    getNextPageParam(lastGroup) {
-      return lastGroup.pageIndex + 1
-    },
-    keepPreviousData: true,
-    refetchOnWindowFocus: false,
-  })
+  const store = useStore()
 
-  const flatData = useMemo(
-    () => data?.pages?.flatMap((page) => page.accountList.items) ?? [],
-    [data],
-  )
-
-  const totalDBRowCount = data?.pages?.[0]?.accountList.total ?? 0
-  const totalFetched = flatData.length
-
-  const hasMore = totalFetched < totalDBRowCount
+  useEffect(() => {
+    store.init(accountList, feature.id)
+  }, [])
 
   return (
     <>
       <Page user={user}>
         <h2>🚩 {feature.name}</h2>
         <AccountTable
-          accountList={accountList}
-          isFetching={isFetching}
-          hasMore={hasMore}
-          fetchNextPage={fetchNextPage}
+          rows={store.valueList}
+          total={store.total}
+          isLoaded={store.isLoaded}
+          loadRange={store.loadRange}
         />
       </Page>
     </>

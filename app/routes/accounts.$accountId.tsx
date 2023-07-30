@@ -6,14 +6,11 @@ import { createRunnBackend } from '~/lib/runn.server'
 import type { Account, FeatureList, User } from '~/lib/types'
 import { AccountPage } from '~/components/page/account'
 import { authenticator } from '~/lib/auth.server'
-import { defaultPageIndex, defaultPageSize } from '~/config'
 
 type LoaderData = {
   user: User
   account: Account
   featureList: FeatureList
-  pageIndex: number
-  pageSize: number
 }
 
 const meta: V2_MetaFunction<LoaderData> = ({ data }) => {
@@ -37,34 +34,22 @@ const loader: LoaderFunction = async ({ request, params }) => {
 
   const backend = createRunnBackend()
 
-  const pageIndex = defaultPageIndex
-  const pageSize = defaultPageSize
-
   const [account, featureList] = await Promise.all([
     backend.getAccount({ id: accountId }),
     backend.getFeatureListForAccount({
       accountId,
-      take: pageSize,
-      skip: (pageIndex - 1) * pageSize,
+      take: 5,
+      skip: 0,
     }),
   ])
 
-  return json<LoaderData>({ account, featureList, pageIndex, pageSize, user })
+  return json<LoaderData>({ account, featureList, user })
 }
 
 const Route = () => {
-  const { user, account, featureList, pageIndex, pageSize } =
-    useLoaderData<LoaderData>()
+  const { user, account, featureList } = useLoaderData<LoaderData>()
 
-  return (
-    <AccountPage
-      account={account}
-      featureList={featureList}
-      pageIndex={pageIndex}
-      pageSize={pageSize}
-      user={user}
-    />
-  )
+  return <AccountPage account={account} featureList={featureList} user={user} />
 }
 
 export { meta, loader }

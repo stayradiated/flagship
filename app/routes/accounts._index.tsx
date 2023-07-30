@@ -7,7 +7,6 @@ import { createRunnBackend } from '~/lib/runn.server'
 import type { AccountList, User } from '~/lib/types'
 import { AccountListPage } from '~/components/page/account-list'
 import { authenticator } from '~/lib/auth.server'
-import { defaultPageIndex, defaultPageSize } from '~/config'
 
 const meta: V2_MetaFunction = () => {
   return [
@@ -18,8 +17,6 @@ const meta: V2_MetaFunction = () => {
 
 type LoaderData = {
   accountList: AccountList
-  pageIndex: number
-  pageSize: number
   user: User
   search?: string
 }
@@ -38,30 +35,20 @@ const loader: LoaderFunction = async ({ request }) => {
 
   const backend = createRunnBackend()
 
-  const pageIndex = defaultPageIndex
-  const pageSize = defaultPageSize
-
   const accountList = await backend.getAccountList({
     search,
-    take: pageSize,
-    skip: (pageIndex - 1) * pageSize,
+    take: 50,
+    skip: 0,
   })
 
-  return json<LoaderData>({ pageIndex, pageSize, accountList, user, search })
+  return json<LoaderData>({ accountList, user, search })
 }
 
 const Route = () => {
-  const { accountList, pageIndex, pageSize, user, search } =
-    useLoaderData<LoaderData>()
+  const { accountList, user, search } = useLoaderData<LoaderData>()
 
   return (
-    <AccountListPage
-      pageIndex={pageIndex}
-      pageSize={pageSize}
-      accountList={accountList}
-      user={user}
-      search={search}
-    />
+    <AccountListPage accountList={accountList} user={user} search={search} />
   )
 }
 

@@ -10,8 +10,6 @@ type PageHeaderProps = {
 const PageHeader = (props: PageHeaderProps) => {
   const { user } = props
 
-  console.log({ user })
-
   return (
     <header className={styles.container}>
       <h1>

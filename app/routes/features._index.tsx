@@ -5,7 +5,6 @@ import { createRunnBackend } from '~/lib/runn.server'
 import type { FeatureList, User } from '~/lib/types'
 import { FeatureListPage } from '~/components/page/feature-list'
 import { authenticator } from '~/lib/auth.server'
-import { defaultPageIndex, defaultPageSize } from '~/config'
 
 const meta: V2_MetaFunction = () => {
   return [
@@ -16,8 +15,6 @@ const meta: V2_MetaFunction = () => {
 
 type LoaderData = {
   featureList: FeatureList
-  pageIndex: number
-  pageSize: number
   user: User
 }
 
@@ -28,28 +25,18 @@ const loader: LoaderFunction = async ({ request }) => {
 
   const backend = createRunnBackend()
 
-  const pageIndex = defaultPageIndex
-  const pageSize = defaultPageSize
-
   const featureList = await backend.getFeatureList({
-    take: pageSize,
-    skip: (pageIndex - 1) * pageSize,
+    take: 5,
+    skip: 0,
   })
 
-  return json<LoaderData>({ pageIndex, pageSize, featureList, user })
+  return json<LoaderData>({ featureList, user })
 }
 
 const Route = () => {
-  const { featureList, pageIndex, pageSize, user } = useLoaderData<LoaderData>()
+  const { featureList, user } = useLoaderData<LoaderData>()
 
-  return (
-    <FeatureListPage
-      pageIndex={pageIndex}
-      pageSize={pageSize}
-      featureList={featureList}
-      user={user}
-    />
-  )
+  return <FeatureListPage featureList={featureList} user={user} />
 }
 
 export { meta, loader }

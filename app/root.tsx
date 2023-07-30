@@ -8,7 +8,6 @@ import {
   Scripts,
   ScrollRestoration,
 } from '@remix-run/react'
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import normalizeStyles from 'normalize.css'
 import { useState } from 'react'
 import pollenStyles from '~/pollen.css'
@@ -20,8 +19,6 @@ const links: LinksFunction = () => [
 ]
 
 const Route = () => {
-  const [queryClient] = useState(() => new QueryClient())
-
   return (
     <html lang="en">
       <head>
@@ -31,9 +28,7 @@ const Route = () => {
         <Links />
       </head>
       <body>
-        <QueryClientProvider client={queryClient}>
-          <Outlet />
-        </QueryClientProvider>
+        <Outlet />
         <ScrollRestoration />
         <Scripts />
         <LiveReload />

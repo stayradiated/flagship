@@ -1,70 +1,50 @@
-import { Link } from '@remix-run/react'
-import {
-  createColumnHelper,
-  getCoreRowModel,
-  useReactTable,
-} from '@tanstack/react-table'
-import { Table, CellIdentifier } from './table'
-import type { Account, AccountList } from '~/lib/types'
-
-const columnHelper = createColumnHelper<Account>()
-
-const columns = [
-  columnHelper.accessor('id', {
-    header: 'ID',
-    cell: CellIdentifier,
-    size: 1,
-  }),
-  columnHelper.accessor('name', {
-    header: 'Name',
-    cell(info) {
-      return (
-        <Link to={`/accounts/${info.row.original.id}`}>{info.getValue()}</Link>
-      )
-    },
-    size: 6,
-  }),
-  columnHelper.accessor('labelList', {
-    header: 'Labels',
-    cell: (info) =>
-      info.getValue().map((label, index) => (
-        <span key={index}>
-          {label.name}: {label.value}
-        </span>
-      )),
-    size: 10,
-  }),
-]
+import AutoSizer from 'react-virtualized-auto-sizer'
+import InfiniteLoader from 'react-window-infinite-loader'
+import { FixedSizeList as List } from 'react-window'
+import { AccountTableRow } from './account-table-row'
+import styles from './account-table.module.css'
+import type { Account } from '~/lib/types'
 
 type AccountTableProps = {
-  accountList: AccountList
-  isFetching: boolean
-  hasMore: boolean
-  fetchNextPage: () => void
+  rows: Array<Account | undefined>
+  total: number
+  isLoaded: (index: number) => boolean
+  loadRange: (startIndex: number, stopIndex: number) => Promise<void>
 }
 
 const AccountTable = (props: AccountTableProps) => {
-  const { accountList, isFetching, hasMore, fetchNextPage } = props
-
-  const table = useReactTable({
-    data: accountList.items,
-    columns,
-    getCoreRowModel: getCoreRowModel<Account>(),
-    defaultColumn: {
-      minSize: 0,
-      size: 1,
-      maxSize: Number.MAX_SAFE_INTEGER,
-    },
-  })
+  const { rows, total, isLoaded, loadRange } = props
 
   return (
-    <Table
-      table={table}
-      totalRowCount={accountList.total}
-      isFetching={isFetching}
-      hasMore={hasMore}
-      fetchNextPage={fetchNextPage}
-    />
+    <div className={styles.container}>
+      <AutoSizer>
+        {({ height, width }) => (
+          <InfiniteLoader
+            isItemLoaded={isLoaded}
+            itemCount={total}
+            loadMoreItems={loadRange}
+            minimumBatchSize={20}
+            threshold={2}
+          >
+            {({ onItemsRendered, ref }) => (
+              <List
+                onItemsRendered={onItemsRendered}
+                ref={ref}
+                width={width}
+                height={height}
+                itemCount={total}
+                itemSize={35}
+                overscanCount={10}
+              >
+                {({ index, style }) => (
+                  <AccountTableRow account={rows[index]} style={style} />
+                )}
+              </List>
+            )}
+          </InfiniteLoader>
+        )}
+      </AutoSizer>
+    </div>
   )
 }
 
