@@ -4,7 +4,7 @@ import { zfd } from 'zod-form-data'
 import { z } from 'zod'
 import { createRunnBackend } from '~/lib/runn.server'
 import type { FeatureList } from '~/lib/types'
-import { authenticator } from '~/lib/auth.server'
+import { getAuthenticator } from '~/lib/auth.server'
 
 type LoaderData = {
   featureList: FeatureList
@@ -18,6 +18,9 @@ const $LoaderSearchParameters = zfd.formData({
 })
 
 const loader: LoaderFunction = async ({ request }) => {
+  const backend = createRunnBackend()
+  const authenticator = getAuthenticator(backend)
+
   await authenticator.authenticate('google', request, {
     failureRedirect: '/login',
   })
@@ -26,8 +29,6 @@ const loader: LoaderFunction = async ({ request }) => {
   const { take, skip, accountId } = $LoaderSearchParameters.parse(
     url.searchParams,
   )
-
-  const backend = createRunnBackend()
 
   const featureList = accountId
     ? await backend.getFeatureListForAccount({

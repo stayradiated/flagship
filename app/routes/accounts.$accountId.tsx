@@ -5,7 +5,7 @@ import { z } from 'zod'
 import { createRunnBackend } from '~/lib/runn.server'
 import type { Account, FeatureList, User } from '~/lib/types'
 import { AccountPage } from '~/components/page/account'
-import { authenticator } from '~/lib/auth.server'
+import { getAuthenticator } from '~/lib/auth.server'
 
 type LoaderData = {
   user: User
@@ -26,13 +26,14 @@ const $LoaderParameters = z.object({
 })
 
 const loader: LoaderFunction = async ({ request, params }) => {
+  const backend = createRunnBackend()
+  const authenticator = getAuthenticator(backend)
+
   const user = await authenticator.authenticate('google', request, {
     failureRedirect: '/login',
   })
 
   const { accountId } = $LoaderParameters.parse(params)
-
-  const backend = createRunnBackend()
 
   const [account, featureList] = await Promise.all([
     backend.getAccount({ id: accountId }),

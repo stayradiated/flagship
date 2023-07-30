@@ -60,6 +60,17 @@ export type GetAccountListForFeatureFn = (
   } & PaginatedArgs,
 ) => Promise<AccountList>
 
+export type AuthenticateUserFn = (user: User) => Promise<
+  | {
+      isAuthenticated: true
+      user: User
+    }
+  | {
+      isAuthenticated: false
+      errorMessage: string
+    }
+>
+
 export type FlagshipBackend = {
   getFeature: GetFeatureFn
   getFeatureList: GetFeatureListFn
@@ -69,4 +80,6 @@ export type FlagshipBackend = {
 
   getFeatureListForAccount: GetFeatureListForAccountFn
   getAccountListForFeature: GetAccountListForFeatureFn
+
+  authenticateUser: AuthenticateUserFn
 }

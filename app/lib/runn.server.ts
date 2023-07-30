@@ -37,6 +37,21 @@ const createRunnBackend = (): FlagshipBackend => {
   }
 
   return {
+    async authenticateUser(user) {
+      const isAuthenticated = user.email.endsWith('@runn.io')
+      if (isAuthenticated) {
+        return {
+          isAuthenticated: true,
+          user,
+        }
+      }
+
+      return {
+        isAuthenticated: false,
+        errorMessage: 'Invalid email address, must be @runn.io',
+      }
+    },
+
     async getAccount({ id }) {
       const response = await graphql(
         `

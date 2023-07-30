@@ -1,0 +1,16 @@
+.button {
+  border: none;
+  border-radius: var(--radius-sm);
+  padding: var(--size-2) var(--size-3);
+  color: var(--color-grey-50);
+  background: var(--color-blue);
+  font-size: var(--scale-1);
+  font-family: var(--font-sans);
+  cursor: pointer;
+}
+
+.error {
+  color: var(--color-red);
+  font-size: var(--scale-1);
+  font-family: var(--font-sans);
+}

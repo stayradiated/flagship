@@ -6,7 +6,7 @@ import { z } from 'zod'
 import { createRunnBackend } from '~/lib/runn.server'
 import type { AccountList, User } from '~/lib/types'
 import { AccountListPage } from '~/components/page/account-list'
-import { authenticator } from '~/lib/auth.server'
+import { getAuthenticator } from '~/lib/auth.server'
 
 const meta: V2_MetaFunction = () => {
   return [
@@ -26,14 +26,15 @@ const $LoaderSearchParameters = zfd.formData({
 })
 
 const loader: LoaderFunction = async ({ request }) => {
+  const backend = createRunnBackend()
+  const authenticator = getAuthenticator(backend)
+
   const user = await authenticator.authenticate('google', request, {
     failureRedirect: '/login',
   })
 
   const url = new URL(request.url)
   const { search } = $LoaderSearchParameters.parse(url.searchParams)
-
-  const backend = createRunnBackend()
 
   const accountList = await backend.getAccountList({
     search,

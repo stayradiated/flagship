@@ -4,7 +4,7 @@ import { useLoaderData } from '@remix-run/react'
 import { createRunnBackend } from '~/lib/runn.server'
 import type { FeatureList, User } from '~/lib/types'
 import { FeatureListPage } from '~/components/page/feature-list'
-import { authenticator } from '~/lib/auth.server'
+import { getAuthenticator } from '~/lib/auth.server'
 
 const meta: V2_MetaFunction = () => {
   return [
@@ -19,11 +19,12 @@ type LoaderData = {
 }
 
 const loader: LoaderFunction = async ({ request }) => {
+  const backend = createRunnBackend()
+  const authenticator = getAuthenticator(backend)
+
   const user = await authenticator.authenticate('google', request, {
     failureRedirect: '/login',
   })
-
-  const backend = createRunnBackend()
 
   const featureList = await backend.getFeatureList({
     take: 30,
