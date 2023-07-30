@@ -37,7 +37,11 @@ const FeatureTable = (props: FeatureTableProps) => {
                 overscanCount={10}
               >
                 {({ index, style }) => (
-                  <FeatureTableRow feature={rows[index]} style={style} />
+                  <FeatureTableRow
+                    feature={rows[index]}
+                    style={style}
+                    index={index}
+                  />
                 )}
               </List>
             )}

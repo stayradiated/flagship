@@ -1,4 +1,5 @@
 import { Link } from '@remix-run/react'
+import { Menu } from '@headlessui/react'
 import styles from './page-header.module.css'
 import { PageHeaderNavLink } from './page-header-nav-link'
 import type { User } from '~/lib/types'
@@ -20,10 +21,17 @@ const PageHeader = (props: PageHeaderProps) => {
 
       {user && (
         <nav className={styles.nav}>
-          <p>{user.name}</p>
           <PageHeaderNavLink to="/features">Features</PageHeaderNavLink>
           <PageHeaderNavLink to="/accounts">Accounts</PageHeaderNavLink>
-          <PageHeaderNavLink to="/logout">Logout</PageHeaderNavLink>
+
+          <Menu>
+            <Menu.Button>{user.name}</Menu.Button>
+            <Menu.Items>
+              <Menu.Item>
+                <Link to="/logout">Logout</Link>
+              </Menu.Item>
+            </Menu.Items>
+          </Menu>
         </nav>
       )}
     </header>

@@ -37,7 +37,11 @@ const AccountTable = (props: AccountTableProps) => {
                 overscanCount={10}
               >
                 {({ index, style }) => (
-                  <AccountTableRow account={rows[index]} style={style} />
+                  <AccountTableRow
+                    account={rows[index]}
+                    style={style}
+                    index={index}
+                  />
                 )}
               </List>
             )}

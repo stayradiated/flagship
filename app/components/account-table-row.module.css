@@ -6,7 +6,7 @@
 
   height: 35px;
 }
-.container:nth-child(odd) {
+.container.odd {
   background: var(--color-grey-50);
 }
 
@@ -14,7 +14,7 @@
 .name,
 .labelList {
   flex: 1;
-  font-size: var(--scale-1);
+  font-size: var(--scale-0);
   line-height: var(--line-md);
   padding: var(--size-2) 0;
   font-family: var(--font-sans);
@@ -25,13 +25,21 @@
 }
 
 .id {
+  flex: none;
+  width: var(--size-10);
+  text-align: center;
   font-family: var(--font-mono);
-  font-size: var(--scale-0);
+  font-size: var(--scale-00);
   background: var(--color-grey-100);
   padding: var(--size-1) var(--size-2);
   border-radius: var(--radius-xs);
+  height: var(--size-6);
 }
 
 .name {
   font-weight: var(--weight-semibold);
+}
+
+.labelList {
+  flex: 2;
 }

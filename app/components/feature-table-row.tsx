@@ -1,23 +1,27 @@
 import { Link } from '@remix-run/react'
 import * as dateFns from 'date-fns'
+import cc from 'classcat'
 import styles from './feature-table-row.module.css'
 import type { Feature } from '~/lib/types'
 
 type FeatureTableRowProps = {
+  index: number
   feature: Feature | undefined
   style?: React.CSSProperties
 }
 
 const FeatureTableRow = (props: FeatureTableRowProps) => {
-  const { feature, style } = props
+  const { feature: rFeature, style, index } = props
 
-  if (!feature) {
-    return (
-      <div className={styles.container} style={style}>
-        <div className={styles.name}>Loading...</div>
-      </div>
-    )
-  }
+  const feature = rFeature
+    ? rFeature
+    : {
+        id: '',
+        name: 'Loading...',
+        description: '',
+        enabled: false,
+        createdAt: 0,
+      }
 
   const createdAt = dateFns.format(
     dateFns.toDate(feature.createdAt),
@@ -25,7 +29,13 @@ const FeatureTableRow = (props: FeatureTableRowProps) => {
   )
 
   return (
-    <div className={styles.container} style={style}>
+    <div
+      className={cc({
+        [styles.container]: true,
+        [styles.odd]: index % 2 === 0,
+      })}
+      style={style}
+    >
       <div>
         <input
           type="checkbox"

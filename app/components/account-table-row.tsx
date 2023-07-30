@@ -1,28 +1,34 @@
 import { Link } from '@remix-run/react'
+import cc from 'classcat'
 import styles from './account-table-row.module.css'
 import type { Account } from '~/lib/types'
 
 type AccountTableRowProps = {
+  index: number
   account: Account | undefined
   style?: React.CSSProperties
 }
 
 const AccountTableRow = (props: AccountTableRowProps) => {
-  const { account, style } = props
+  const { account: rAccount, style, index } = props
 
-  if (!account) {
-    return (
-      <div className={styles.container} style={style}>
-        <div className={styles.id}>Loading...</div>
-      </div>
-    )
-  }
+  const account = rAccount
+    ? rAccount
+    : {
+        id: '',
+        name: 'Loading...',
+        labelList: [],
+      }
 
   return (
-    <div className={styles.container} style={style}>
-      <div>
-        <code className={styles.id}>{account.id}</code>
-      </div>
+    <div
+      className={cc({
+        [styles.container]: true,
+        [styles.odd]: index % 2 === 0,
+      })}
+      style={style}
+    >
+      <div className={styles.id}>{account.id}</div>
       <Link to={`/accounts/${account.id}`} className={styles.name}>
         {account.name}
       </Link>
