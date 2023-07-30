@@ -4,13 +4,10 @@ import type { FlagshipBackend } from './types'
 
 const createRunnBackend = (): FlagshipBackend => {
   const endpoint = process.env.RUNN_GRAPHQL_ENDPOINT
-  const adminSecret = process.env.RUNN_GRAPHQL_SECRET
+  const authToken = process.env.RUNN_GRAPHQL_AUTH_TOKEN
 
   assert(typeof endpoint === 'string', 'RUNN_GRAPHQL_ENDPOINT is required')
-  assert(
-    typeof adminSecret === 'string',
-    'RUNN_GRAPHQL_ADMIN_SECRET is required',
-  )
+  assert(typeof authToken === 'string', 'RUNN_GRAPHQL_AUTH_TOKEN is required')
 
   const graphql = async (
     query: string,
@@ -20,7 +17,7 @@ const createRunnBackend = (): FlagshipBackend => {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        'x-hasura-admin-secret': adminSecret,
+        Authorization: `Bearer ${authToken}`,
       },
       body: JSON.stringify({
         query,
