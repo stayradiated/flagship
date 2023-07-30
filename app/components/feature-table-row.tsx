@@ -1,5 +1,4 @@
-import { useState } from 'react'
-import { Link, useFetcher } from '@remix-run/react'
+import { Link } from '@remix-run/react'
 import * as dateFns from 'date-fns'
 import cc from 'classcat'
 import { Switch } from '@headlessui/react'
@@ -10,13 +9,15 @@ type FeatureTableRowProps = {
   index: number
   feature: Feature | undefined
   style?: React.CSSProperties
+  onToggleFeature?: (options: {
+    accountId: string
+    featureId: string
+    enabled: boolean
+  }) => void
 }
 
 const FeatureTableRow = (props: FeatureTableRowProps) => {
-  const { feature: rFeature, style, index } = props
-
-  const fetcher = useFetcher()
-  const [enabled, setEnabled] = useState(false)
+  const { feature: rFeature, style, index, onToggleFeature } = props
 
   const feature = rFeature
     ? rFeature
@@ -33,21 +34,14 @@ const FeatureTableRow = (props: FeatureTableRowProps) => {
     'dd MMM yyyy',
   )
 
+  const editable = typeof onToggleFeature === 'function'
+
   const handleToggle = (checked: boolean) => {
-    setEnabled(checked)
-
-    const data: {
-      featureId: string
-      enabled?: 'on'
-    } = {
+    onToggleFeature?.({
+      accountId: '1',
       featureId: feature.id,
-    }
-
-    if (checked) {
-      data.enabled = 'on'
-    }
-
-    fetcher.submit(data, { method: 'post', action: '?_action=toggleFeature' })
+      enabled: checked,
+    })
   }
 
   return (
@@ -59,9 +53,13 @@ const FeatureTableRow = (props: FeatureTableRowProps) => {
       style={style}
     >
       <div>
-        <Switch checked={enabled} onChange={handleToggle}>
-          <p>{enabled ? '✓' : 'x'}</p>
-        </Switch>
+        {editable ? (
+          <Switch checked={feature.enabled} onChange={handleToggle}>
+            <p>{feature.enabled ? '✓' : 'x'}</p>
+          </Switch>
+        ) : (
+          <p>{feature.enabled ? '✓' : 'x'}</p>
+        )}
       </div>
       <Link to={`/features/${feature.id}`} className={styles.name}>
         {feature.name}

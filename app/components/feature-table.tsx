@@ -10,10 +10,16 @@ type FeatureTableProps = {
   total: number
   isLoaded: (index: number) => boolean
   loadRange: (startIndex: number, stopIndex: number) => Promise<void>
+
+  onToggleFeature?: (options: {
+    accountId: string
+    featureId: string
+    enabled: boolean
+  }) => void
 }
 
 const FeatureTable = (props: FeatureTableProps) => {
-  const { rows, total, isLoaded, loadRange } = props
+  const { rows, total, isLoaded, loadRange, onToggleFeature } = props
 
   return (
     <div className={styles.container}>
@@ -38,9 +44,11 @@ const FeatureTable = (props: FeatureTableProps) => {
               >
                 {({ index, style }) => (
                   <FeatureTableRow
+                    key={index}
                     feature={rows[index]}
                     style={style}
                     index={index}
+                    onToggleFeature={onToggleFeature}
                   />
                 )}
               </List>

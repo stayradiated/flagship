@@ -40,6 +40,7 @@ const AccountPage = (props: AccountPageProps) => {
           total={store.total}
           isLoaded={store.isLoaded}
           loadRange={store.loadRange}
+          onToggleFeature={store.toggleFeature}
         />
       </Page>
     </>

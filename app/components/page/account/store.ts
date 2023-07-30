@@ -5,6 +5,7 @@ import {
   rangeContainsPoint,
   rangeLength,
 } from '@stayradiated/mandarin'
+import { produce } from 'immer'
 import type { Feature, FeatureList } from '~/lib/types'
 
 type State = ReturnType<typeof getInitialState<Feature>>
@@ -15,6 +16,12 @@ type Store = State & {
   init: (accountList: FeatureList, accountId: string) => void
   isLoaded: (index: number) => boolean
   loadRange: (start: number, end: number) => Promise<void>
+
+  toggleFeature: (options: {
+    featureId: string
+    accountId: string
+    enabled: boolean
+  }) => Promise<void>
 }
 
 const useStore = create<Store>((set, get) => ({
@@ -65,6 +72,31 @@ const useStore = create<Store>((set, get) => ({
           total: body.accountList.total,
         }
       },
+    })
+  },
+
+  async toggleFeature({ featureId, accountId, enabled }) {
+    set(
+      produce(get(), (draft) => {
+        for (const draftFeature of draft.valueList) {
+          if (draftFeature && draftFeature.id === featureId) {
+            draftFeature.enabled = enabled
+            break
+          }
+        }
+      }),
+    )
+
+    const body = new FormData()
+    body.append('featureId', featureId)
+    body.append('accountId', accountId)
+    if (enabled) {
+      body.append('enabled', 'on')
+    }
+
+    await fetch(`?_action=toggleFeature`, {
+      method: 'POST',
+      body,
     })
   },
 }))

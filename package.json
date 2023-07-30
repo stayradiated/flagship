@@ -20,6 +20,7 @@
     "@stayradiated/mandarin": "4.2.0",
     "classcat": "5.0.4",
     "date-fns": "2.30.0",
+    "immer": "10.0.2",
     "isbot": "3.6.13",
     "normalize.css": "8.0.1",
     "p-debounce": "4.0.0",

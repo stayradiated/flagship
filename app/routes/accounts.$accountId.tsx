@@ -68,6 +68,8 @@ const action: ActionFunction = async ({ request, params }) => {
         await request.formData(),
       )
 
+      console.log('toggleFeature', { accountId, featureId, enabled })
+
       await backend.updateFeatureList([
         {
           accountId,

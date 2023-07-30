@@ -1,0 +1,46 @@
+.title {
+  font-family: var(--font-sans);
+  font-size: var(--scale-3);
+  font-weight: var(--weight-bold);
+  line-height: var(--line-md);
+  margin: 0;
+}
+
+.badgeRow {
+  display: flex;
+  align-items: flex-start;
+  margin: var(--size-3) 0;
+}
+
+.badge {
+  font-family: var(--font-mono);
+  font-size: var(--scale-0);
+
+  background: var(--color-grey-100);
+
+  border-radius: var(--radius-sm);
+  padding: var(--size-2) var(--size-3);
+  line-height: var(--line-md);
+}
+
+.badge .label {
+  font-weight: var(--weight-bold);
+  margin-right: var(--size-3);
+  color: var(--color-grey-500);
+  font-size: var(--scale-00);
+  user-select: none;
+}
+.badge .value {
+}
+
+.description {
+  font-family: var(--font-sans);
+  font-size: var(--scale-0);
+  line-height: var(--line-md);
+  margin: var(--size-3) 0;
+}
+
+.noResult {
+  font-family: var(--font-sans);
+}
+
