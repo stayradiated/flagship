@@ -15,7 +15,19 @@ import pollenStyles from '~/pollen.css'
 const links: LinksFunction = () => [
   { rel: 'stylesheet', href: normalizeStyles },
   { rel: 'stylesheet', href: pollenStyles },
+
   ...(cssBundleHref ? [{ rel: 'stylesheet', href: cssBundleHref }] : []),
+
+  { rel: 'preconnect', href: 'https://fonts.googleapis.com' },
+  {
+    rel: 'preconnect',
+    href: 'https://fonts.gstatic.com',
+    crossOrigin: 'anonymous',
+  },
+  {
+    rel: 'stylesheet',
+    href: 'https://fonts.googleapis.com/css2?family=Work+Sans:wght@400;600;700&display=swap',
+  },
 ]
 
 const Route = () => {
