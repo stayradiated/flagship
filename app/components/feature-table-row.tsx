@@ -1,26 +1,31 @@
 import { Link } from '@remix-run/react'
 import * as dateFns from 'date-fns'
 import cc from 'classcat'
-import { Switch } from '@headlessui/react'
+import { areEqual } from 'react-window'
+import { memo } from 'react'
 import styles from './feature-table-row.module.css'
 import type { Feature } from '~/lib/types'
+import { Switch } from '~/components/switch'
 
 type FeatureTableRowProps = {
   index: number
-  feature: Feature | undefined
   style?: React.CSSProperties
-  onToggleFeature?: (options: {
-    accountId: string
-    featureId: string
-    enabled: boolean
-  }) => void
+  data: {
+    rows: Array<Feature | undefined>
+    onToggleFeature?: (options: {
+      accountId: string
+      featureId: string
+      enabled: boolean
+    }) => void
+  }
 }
 
-const FeatureTableRow = (props: FeatureTableRowProps) => {
-  const { feature: rFeature, style, index, onToggleFeature } = props
+const FeatureTableRow = memo((props: FeatureTableRowProps) => {
+  const { data, style, index } = props
+  const { rows, onToggleFeature } = data
 
-  const feature = rFeature
-    ? rFeature
+  const feature = rows[index]
+    ? rows[index]!
     : {
         id: '',
         name: 'Loading...',
@@ -54,9 +59,7 @@ const FeatureTableRow = (props: FeatureTableRowProps) => {
     >
       <div>
         {editable ? (
-          <Switch checked={feature.enabled} onChange={handleToggle}>
-            <p>{feature.enabled ? '✓' : 'x'}</p>
-          </Switch>
+          <Switch onChange={handleToggle} checked={feature.enabled} />
         ) : (
           <p>{feature.enabled ? '✓' : 'x'}</p>
         )}
@@ -68,6 +71,6 @@ const FeatureTableRow = (props: FeatureTableRowProps) => {
       <div className={styles.date}>{createdAt}</div>
     </div>
   )
-}
+}, areEqual)
 
 export { FeatureTableRow }

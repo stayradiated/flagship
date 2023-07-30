@@ -1,19 +1,24 @@
 import { Link } from '@remix-run/react'
 import cc from 'classcat'
+import { areEqual } from 'react-window'
+import { memo } from 'react'
 import styles from './account-table-row.module.css'
 import type { Account } from '~/lib/types'
 
 type AccountTableRowProps = {
   index: number
-  account: Account | undefined
+  data: {
+    rows: Array<Account | undefined>
+  }
   style?: React.CSSProperties
 }
 
-const AccountTableRow = (props: AccountTableRowProps) => {
-  const { account: rAccount, style, index } = props
+const AccountTableRow = memo((props: AccountTableRowProps) => {
+  const { style, index, data } = props
+  const { rows } = data
 
-  const account = rAccount
-    ? rAccount
+  const account = rows[index]
+    ? rows[index]!
     : {
         id: '',
         name: 'Loading...',
@@ -41,6 +46,6 @@ const AccountTableRow = (props: AccountTableRowProps) => {
       </div>
     </div>
   )
-}
+}, areEqual)
 
 export { AccountTableRow }

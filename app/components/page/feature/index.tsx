@@ -4,6 +4,7 @@ import styles from './index.module.css'
 import type { Feature, AccountList, User } from '~/lib/types'
 import { Page } from '~/components/page'
 import { AccountTable } from '~/components/account-table'
+import { Badge } from '~/components/badge'
 
 type FeaturePageProps = {
   user: User
@@ -26,10 +27,10 @@ const FeaturePage = (props: FeaturePageProps) => {
         <h2 className={styles.title}>🏁 {feature.name}</h2>
 
         <div className={styles.badgeRow}>
-          <div className={styles.badge}>
-            <span className={styles.label}>ID</span>
-            <span className={styles.value}>{feature.id}</span>
-          </div>
+          <Badge>
+            <Badge.Label>ID</Badge.Label>
+            <Badge.Value>{feature.id}</Badge.Value>
+          </Badge>
         </div>
 
         <p className={styles.description}>{feature.description}</p>

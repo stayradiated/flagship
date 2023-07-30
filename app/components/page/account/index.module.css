@@ -1,4 +1,23 @@
 .header {
   display: grid;
-  grid-template-columns: var(--grid-2);
+  grid-template-columns: var(--grid-3);
+}
+
+.title {
+  font-family: var(--font-sans);
+  font-size: var(--scale-4);
+  font-weight: var(--weight-bold);
+}
+
+.badgeRow {
+  display: flex;
+  align-items: flex-start;
+  margin: var(--size-3) 0;
+  gap: var(--size-2);
+}
+
+.subtitle {
+  font-family: var(--font-sans);
+  font-size: var(--scale-3);
+  font-weight: var(--weight-bold);
 }

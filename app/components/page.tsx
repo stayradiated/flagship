@@ -1,5 +1,5 @@
-import { PageHeader } from './page-header'
 import styles from './page.module.css'
+import { PageHeader } from './page-header/index'
 import type { User } from '~/lib/types'
 
 type PageProps = {

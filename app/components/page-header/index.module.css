@@ -1,6 +1,6 @@
 .container {
   display: grid;
-  grid-template-columns: var(--grid-2);
+  grid-template-columns: var(--grid-3);
 }
 
 .title {
@@ -20,6 +20,7 @@
 
 .nav {
   display: flex;
+  grid-column: 2 / 4;
   flex-direction: row;
   justify-content: flex-end;
   align-items: center;

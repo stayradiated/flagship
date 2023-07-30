@@ -1,7 +1,7 @@
 import { NavLink } from '@remix-run/react'
 import type { NavLinkProps } from '@remix-run/react'
 import cc from 'classcat'
-import styles from './page-header-nav-link.module.css'
+import styles from './index.module.css'
 
 type PageHeaderNavLinkProps = NavLinkProps
 

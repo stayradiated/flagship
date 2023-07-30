@@ -5,6 +5,7 @@ import {
   rangeContainsPoint,
   rangeLength,
 } from '@stayradiated/mandarin'
+import type { Range } from '@stayradiated/mandarin'
 import type { Feature, FeatureList } from '~/lib/types'
 
 type State = ReturnType<typeof getInitialState<Feature>>
@@ -15,7 +16,7 @@ type Store = State & {
 
   init: (featureList: FeatureList, search: string) => void
   isLoaded: (index: number) => boolean
-  loadRange: (start: number, end: number) => Promise<void>
+  loadRange: (range: Range) => Promise<void>
 }
 
 const useStore = create<Store>((set, get) => ({
@@ -31,7 +32,7 @@ const useStore = create<Store>((set, get) => ({
       search,
       fetchedSet: new Set(),
     })
-    this.loadRange(0, 30)
+    this.loadRange([0, 30])
   },
 
   init(featureList: FeatureList, search: string) {
@@ -46,12 +47,25 @@ const useStore = create<Store>((set, get) => ({
 
   isLoaded(index) {
     const fetchedRangeList = [...get().fetchedSet.keys()]
-    return fetchedRangeList.some((range) => rangeContainsPoint(range, index))
+    const isFetched = fetchedRangeList.some((range) =>
+      rangeContainsPoint(range, index),
+    )
+    if (isFetched) {
+      return true
+    }
+
+    const promisedRangeList = [...get().promiseMap.keys()]
+    const isPromised = promisedRangeList.some((range) =>
+      rangeContainsPoint(range, index),
+    )
+    if (isPromised) {
+      return true
+    }
+
+    return false
   },
 
-  async loadRange(start, endInclusive) {
-    const end = endInclusive + 1
-
+  async loadRange(range) {
     const { search } = get()
 
     await fetchList<Feature>({
@@ -59,7 +73,7 @@ const useStore = create<Store>((set, get) => ({
       setState(state: State) {
         set(state)
       },
-      range: [start, end],
+      range,
       async fetch(range) {
         const take = rangeLength(range)
         const skip = range[0]

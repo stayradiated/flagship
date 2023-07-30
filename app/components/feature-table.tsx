@@ -1,15 +1,15 @@
-import AutoSizer from 'react-virtualized-auto-sizer'
-import InfiniteLoader from 'react-window-infinite-loader'
-import { FixedSizeList as List } from 'react-window'
-import { FeatureTableRow } from './feature-table-row'
+import { useMemo } from 'react'
+import type { Range } from '@stayradiated/mandarin'
 import styles from './feature-table.module.css'
+import { VirtualList } from './virtual-list'
+import { FeatureTableRow } from './feature-table-row'
 import type { Feature } from '~/lib/types'
 
 type FeatureTableProps = {
   rows: Array<Feature | undefined>
   total: number
   isLoaded: (index: number) => boolean
-  loadRange: (startIndex: number, stopIndex: number) => Promise<void>
+  loadRange: (range: Range) => Promise<void>
 
   onToggleFeature?: (options: {
     accountId: string
@@ -21,41 +21,24 @@ type FeatureTableProps = {
 const FeatureTable = (props: FeatureTableProps) => {
   const { rows, total, isLoaded, loadRange, onToggleFeature } = props
 
+  const data = useMemo(
+    () => ({
+      rows,
+      onToggleFeature,
+    }),
+    [rows, onToggleFeature],
+  )
+
   return (
     <div className={styles.container}>
-      <AutoSizer>
-        {({ height, width }) => (
-          <InfiniteLoader
-            isItemLoaded={isLoaded}
-            itemCount={total}
-            loadMoreItems={loadRange}
-            minimumBatchSize={20}
-            threshold={2}
-          >
-            {({ onItemsRendered, ref }) => (
-              <List
-                onItemsRendered={onItemsRendered}
-                ref={ref}
-                width={width}
-                height={height}
-                itemCount={total}
-                itemSize={35}
-                overscanCount={10}
-              >
-                {({ index, style }) => (
-                  <FeatureTableRow
-                    key={index}
-                    feature={rows[index]}
-                    style={style}
-                    index={index}
-                    onToggleFeature={onToggleFeature}
-                  />
-                )}
-              </List>
-            )}
-          </InfiniteLoader>
-        )}
-      </AutoSizer>
+      <VirtualList
+        rowHeight={35}
+        data={data}
+        total={total}
+        isLoaded={isLoaded}
+        loadRange={loadRange}
+        RowComponent={FeatureTableRow}
+      />
     </div>
   )
 }

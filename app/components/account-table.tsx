@@ -1,53 +1,37 @@
-import AutoSizer from 'react-virtualized-auto-sizer'
-import InfiniteLoader from 'react-window-infinite-loader'
-import { FixedSizeList as List } from 'react-window'
-import { AccountTableRow } from './account-table-row'
+import { useMemo } from 'react'
+import type { Range } from '@stayradiated/mandarin'
 import styles from './account-table.module.css'
+import { AccountTableRow } from './account-table-row'
+import { VirtualList } from './virtual-list'
 import type { Account } from '~/lib/types'
 
 type AccountTableProps = {
   rows: Array<Account | undefined>
   total: number
   isLoaded: (index: number) => boolean
-  loadRange: (startIndex: number, stopIndex: number) => Promise<void>
+  loadRange: (range: Range) => Promise<void>
 }
 
 const AccountTable = (props: AccountTableProps) => {
   const { rows, total, isLoaded, loadRange } = props
 
+  const data = useMemo(
+    () => ({
+      rows,
+    }),
+    [rows],
+  )
+
   return (
     <div className={styles.container}>
-      <AutoSizer>
-        {({ height, width }) => (
-          <InfiniteLoader
-            isItemLoaded={isLoaded}
-            itemCount={total}
-            loadMoreItems={loadRange}
-            minimumBatchSize={20}
-            threshold={2}
-          >
-            {({ onItemsRendered, ref }) => (
-              <List
-                onItemsRendered={onItemsRendered}
-                ref={ref}
-                width={width}
-                height={height}
-                itemCount={total}
-                itemSize={35}
-                overscanCount={10}
-              >
-                {({ index, style }) => (
-                  <AccountTableRow
-                    account={rows[index]}
-                    style={style}
-                    index={index}
-                  />
-                )}
-              </List>
-            )}
-          </InfiniteLoader>
-        )}
-      </AutoSizer>
+      <VirtualList
+        rowHeight={35}
+        data={data}
+        total={total}
+        isLoaded={isLoaded}
+        loadRange={loadRange}
+        RowComponent={AccountTableRow}
+      />
     </div>
   )
 }

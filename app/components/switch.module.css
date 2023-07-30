@@ -1,0 +1,42 @@
+.switch {
+  display: block;
+  position: relative; 
+
+  padding: 0;
+  margin: 0;
+
+  border-radius: var(--radius-full);
+  border: none;
+
+  transition: all ease-in-out 300ms;
+
+  cursor: pointer; 
+  height: var(--size-7);
+  width: var(--size-14);
+
+  background: var(--color-grey-200);
+}
+.switch.enabled {
+  background: var(--color-blue-300);
+}
+
+.switchKnob {
+  display: block; 
+  border-radius: var(--radius-full);
+
+  box-shadow: var(--shadow-sm);
+  background-color: var(--color-grey-50);
+
+  transition: all ease-in-out 300ms;
+
+  pointer-events: none; 
+
+  height: var(--size-7);
+  width: var(--size-7);
+
+  transform: translateX(0);
+}
+.switch.enabled .switchKnob {
+  transform: translateX(var(--size-8));
+}
+

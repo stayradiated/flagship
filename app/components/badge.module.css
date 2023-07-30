@@ -1,0 +1,22 @@
+.badge {
+  font-family: var(--font-mono);
+  font-size: var(--scale-0);
+
+  background: var(--color-grey-100);
+
+  border-radius: var(--radius-sm);
+  padding: var(--size-2) var(--size-3);
+  line-height: var(--line-md);
+}
+
+.label {
+  font-weight: var(--weight-bold);
+  margin-right: var(--size-3);
+  color: var(--color-grey-500);
+  font-size: var(--scale-00);
+  user-select: none;
+}
+
+.value {
+}
+
