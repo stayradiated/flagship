@@ -75,6 +75,14 @@ export type AuthenticateUserFn = (user: User) => Promise<
     }
 >
 
+export type UpdateFeatureFn = (
+  updateList: ReadonlyArray<{
+    readonly featureId: string
+    readonly accountId: string
+    readonly enabled: boolean
+  }>,
+) => Promise<void>
+
 export type FlagshipBackend = {
   getFeature: GetFeatureFn
   getFeatureList: GetFeatureListFn
@@ -86,4 +94,6 @@ export type FlagshipBackend = {
   getAccountListForFeature: GetAccountListForFeatureFn
 
   authenticateUser: AuthenticateUserFn
+
+  updateFeatureList: UpdateFeatureFn
 }
