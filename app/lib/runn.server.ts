@@ -1,6 +1,6 @@
 import assert from 'node:assert'
 import * as dateFns from 'date-fns'
-import type { FlagshipBackend, Label } from './types'
+import type { FlagshipBackend } from './types'
 
 const createRunnBackend = (): FlagshipBackend => {
   const endpoint = process.env.RUNN_GRAPHQL_ENDPOINT
@@ -76,13 +76,13 @@ const createRunnBackend = (): FlagshipBackend => {
             name: 'type',
             value: account.account_type,
           },
-          account.size > 0
+          typeof account.size === 'string'
             ? {
                 name: 'size',
                 value: account.size,
               }
-            : undefined,
-        ].filter(Boolean),
+            : [],
+        ].flat(),
       }
     },
     async getFeature({ id }) {
@@ -155,13 +155,13 @@ const createRunnBackend = (): FlagshipBackend => {
               name: 'type',
               value: account.account_type,
             },
-            account.size > 0
+            typeof account.size === 'string'
               ? {
                   name: 'size',
                   value: account.size,
                 }
-              : undefined,
-          ].filter(Boolean),
+              : [],
+          ].flat(),
         })),
       }
     },
@@ -309,13 +309,13 @@ const createRunnBackend = (): FlagshipBackend => {
               name: 'type',
               value: account.account_type,
             },
-            account.size > 0
+            typeof account.size === 'string'
               ? {
                   name: 'size',
                   value: account.size,
                 }
-              : undefined,
-          ].filter(Boolean),
+              : [],
+          ].flat(),
         })),
       }
     },
