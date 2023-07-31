@@ -4,6 +4,7 @@ import styles from './feature-table.module.css'
 import { VirtualList } from './virtual-list'
 import { FeatureTableRow } from './feature-table-row'
 import type { Feature } from '~/lib/types'
+import { TableHead } from '~/components/table-head'
 
 type FeatureTableProps = {
   rows: Array<Feature | undefined>
@@ -31,6 +32,16 @@ const FeatureTable = (props: FeatureTableProps) => {
 
   return (
     <div className={styles.container}>
+      <TableHead>
+        <TableHead.Column className={styles.switch} />
+        <TableHead.Column className={styles.name}>Name</TableHead.Column>
+        <TableHead.Column className={styles.description}>
+          Description
+        </TableHead.Column>
+        <TableHead.Column className={styles.createdAt}>
+          Created At
+        </TableHead.Column>
+      </TableHead>
       <VirtualList
         rowHeight={35}
         data={data}

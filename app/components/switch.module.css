@@ -14,29 +14,35 @@
   height: var(--size-7);
   width: var(--size-14);
 
-  background: var(--color-grey-200);
+  background: var(--color-grey-300);
 }
 .switch.enabled {
-  background: var(--color-blue-300);
+  background: var(--color-blue-500);
+}
+.switch.disabled {
+  cursor: not-allowed;
 }
 
 .switchKnob {
+  --offset: 4px;
+
   display: block; 
   border-radius: var(--radius-full);
-
-  box-shadow: var(--shadow-sm);
-  background-color: var(--color-grey-50);
 
   transition: all ease-in-out 300ms;
 
   pointer-events: none; 
 
-  height: var(--size-7);
-  width: var(--size-7);
+  height: calc(var(--size-7) - (var(--offset) * 2));
+  width: calc(var(--size-7) - (var(--offset) * 2));
 
-  transform: translateX(0);
+  box-shadow: var(--shadow-sm);
+
+  background-color: var(--color-grey-50);
+  transform: translateX(var(--offset));
 }
 .switch.enabled .switchKnob {
-  transform: translateX(var(--size-8));
+  transform: translateX(calc(var(--size-7) + var(--offset)));
+  background-color: white;
 }
 

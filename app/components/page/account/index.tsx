@@ -1,4 +1,5 @@
-import { useEffect, useState } from 'react'
+import { useEffect } from 'react'
+import { UserIcon } from '@heroicons/react/24/solid'
 import styles from './index.module.css'
 import { useStore } from './store.js'
 import type { Account, FeatureList, User } from '~/lib/types'
@@ -32,7 +33,9 @@ const AccountPage = (props: AccountPageProps) => {
     <>
       <Page user={user}>
         <section className={styles.header}>
-          <h1 className={styles.title}>👤 {account.name}</h1>
+          <h1 className={styles.title}>
+            <UserIcon className={styles.accountIcon} /> {account.name}
+          </h1>
           <div className={styles.badgeRow}>
             <Badge>
               <Badge.Label>ID</Badge.Label>

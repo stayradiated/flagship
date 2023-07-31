@@ -4,6 +4,7 @@ import styles from './account-table.module.css'
 import { AccountTableRow } from './account-table-row'
 import { VirtualList } from './virtual-list'
 import type { Account } from '~/lib/types'
+import { TableHead } from '~/components/table-head'
 
 type AccountTableProps = {
   rows: Array<Account | undefined>
@@ -24,8 +25,15 @@ const AccountTable = (props: AccountTableProps) => {
 
   return (
     <div className={styles.container}>
+      <TableHead>
+        <TableHead.Column className={styles.id}>ID</TableHead.Column>
+        <TableHead.Column className={styles.name}>Name</TableHead.Column>
+        <TableHead.Column className={styles.properties}>
+          Properties
+        </TableHead.Column>
+      </TableHead>
       <VirtualList
-        rowHeight={35}
+        rowHeight={40}
         data={data}
         total={total}
         isLoaded={isLoaded}

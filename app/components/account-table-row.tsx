@@ -4,6 +4,7 @@ import { areEqual } from 'react-window'
 import { memo } from 'react'
 import styles from './account-table-row.module.css'
 import type { Account } from '~/lib/types'
+import { Badge } from '~/components/badge'
 
 type AccountTableRowProps = {
   index: number
@@ -39,9 +40,10 @@ const AccountTableRow = memo((props: AccountTableRowProps) => {
       </Link>
       <div className={styles.labelList}>
         {account.labelList.map((label, index) => (
-          <span key={index}>
-            {label.name}: {label.value}
-          </span>
+          <Badge key={index}>
+            <Badge.Label>{label.name}</Badge.Label>
+            <Badge.Value>{label.value}</Badge.Value>
+          </Badge>
         ))}
       </div>
     </div>

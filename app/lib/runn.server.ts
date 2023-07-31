@@ -1,6 +1,6 @@
 import assert from 'node:assert'
 import * as dateFns from 'date-fns'
-import type { FlagshipBackend } from './types'
+import type { FlagshipBackend, Label } from './types'
 
 const createRunnBackend = (): FlagshipBackend => {
   const endpoint = process.env.RUNN_GRAPHQL_ENDPOINT
@@ -57,6 +57,7 @@ const createRunnBackend = (): FlagshipBackend => {
               id
               name
               account_type
+              size
             }
           }
         `,
@@ -75,7 +76,13 @@ const createRunnBackend = (): FlagshipBackend => {
             name: 'type',
             value: account.account_type,
           },
-        ],
+          account.size > 0
+            ? {
+                name: 'size',
+                value: account.size,
+              }
+            : undefined,
+        ].filter(Boolean),
       }
     },
     async getFeature({ id }) {
@@ -122,6 +129,7 @@ const createRunnBackend = (): FlagshipBackend => {
               id
               name
               account_type
+              size
             }
             accounts_aggregate(where: { name: { _ilike: $search } }) {
               aggregate {
@@ -147,7 +155,13 @@ const createRunnBackend = (): FlagshipBackend => {
               name: 'type',
               value: account.account_type,
             },
-          ],
+            account.size > 0
+              ? {
+                  name: 'size',
+                  value: account.size,
+                }
+              : undefined,
+          ].filter(Boolean),
         })),
       }
     },
@@ -295,7 +309,13 @@ const createRunnBackend = (): FlagshipBackend => {
               name: 'type',
               value: account.account_type,
             },
-          ],
+            account.size > 0
+              ? {
+                  name: 'size',
+                  value: account.size,
+                }
+              : undefined,
+          ].filter(Boolean),
         })),
       }
     },

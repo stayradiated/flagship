@@ -57,13 +57,11 @@ const FeatureTableRow = memo((props: FeatureTableRowProps) => {
       })}
       style={style}
     >
-      <div>
-        {editable ? (
-          <Switch onChange={handleToggle} checked={feature.enabled} />
-        ) : (
-          <p>{feature.enabled ? '✓' : 'x'}</p>
-        )}
-      </div>
+      <Switch
+        onChange={handleToggle}
+        checked={feature.enabled}
+        disabled={!editable}
+      />
       <Link to={`/features/${feature.id}`} className={styles.name}>
         {feature.name}
       </Link>

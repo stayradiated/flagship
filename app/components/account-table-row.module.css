@@ -4,7 +4,8 @@
   padding: 0 var(--size-2);
   box-sizing: border-box;
 
-  height: 35px;
+  /* must match the rowHeight in AcountTable */
+  height: 40px;
 }
 .container.odd {
   background: var(--color-grey-50);
@@ -26,20 +27,34 @@
 
 .id {
   flex: none;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+
   width: var(--size-10);
-  text-align: center;
   font-family: var(--font-mono);
+  font-weight: var(--weight-semibold);
   font-size: var(--scale-00);
-  background: var(--color-grey-100);
+  /* background: var(--color-grey-100); */
+  color: var(--color-grey-600);
   padding: var(--size-1) var(--size-2);
   border-radius: var(--radius-xs);
-  height: var(--size-6);
 }
 
 .name {
   font-weight: var(--weight-semibold);
+  text-decoration: none;
+  color: var(--color-blue-700);
+}
+.name:hover {
+  text-decoration: underline;
+  color: var(--color-blue-500);
 }
 
 .labelList {
   flex: 2;
+  display: flex;
+  align-items: center;
+  gap: var(--size-2);
+  padding: 0;
 }

@@ -1,4 +1,4 @@
-import type { LoaderFunction } from '@remix-run/node'
+import type { V2_MetaFunction, LoaderFunction } from '@remix-run/node'
 import { json } from '@remix-run/node'
 import { useLoaderData } from '@remix-run/react'
 import { getAuthenticator } from '~/lib/auth.server'
@@ -10,6 +10,13 @@ type LoaderData = {
   error?: {
     message: string
   }
+}
+
+const meta: V2_MetaFunction<LoaderData> = () => {
+  return [
+    { title: `Sign In • Flagship` },
+    { name: 'description', content: 'Manage Feature Flags' },
+  ]
 }
 
 const loader: LoaderFunction = async ({ request }) => {
@@ -32,5 +39,5 @@ const Route = () => {
   return <LoginPage error={error} />
 }
 
-export { loader }
+export { meta, loader }
 export default Route

@@ -3,6 +3,7 @@
   gap: var(--size-2);
   padding: 0 var(--size-2);
   box-sizing: border-box;
+  align-items: center;
 
   height: 35px;
 }

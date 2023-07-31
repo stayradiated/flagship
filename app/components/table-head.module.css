@@ -1,0 +1,23 @@
+.container {
+  display: flex;
+  gap: var(--size-2);
+  border-bottom: 1px solid var(--color-grey-200);
+}
+
+.column {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  font-family: var(--font-sans);
+  font-weight: var(--weight-semibold);
+  font-size: var(--scale-00);
+  line-height: var(--line-md);
+
+  border-right: 1px solid var(--color-grey-200);
+  color: var(--color-grey-600);
+  text-transform: uppercase;
+}
+.column:last-child {
+  border-right: none;
+}

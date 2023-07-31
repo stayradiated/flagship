@@ -5,3 +5,20 @@
   border-bottom-left-radius: var(--radius-md);
   box-sizing: border-box;
 }
+
+.id, .name, .properties {
+  padding: var(--size-2);
+}
+
+.id {
+  flex: none;
+  width: var(--size-10);
+}
+
+.name {
+  flex: 1;
+}
+
+.properties {
+  flex: 2;
+}

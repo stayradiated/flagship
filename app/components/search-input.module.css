@@ -1,6 +1,6 @@
 .searchInput {
   font-family: var(--font-sans);
-  font-size: var(--scale-1);
+  font-size: var(--scale-0);
   padding: var(--size-2) var(--size-3);
   margin-bottom: var(--size-3);
   border-radius: var(--radius-xs);

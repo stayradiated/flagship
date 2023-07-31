@@ -5,3 +5,24 @@
   border-bottom-left-radius: var(--radius-md);
   box-sizing: border-box;
 }
+
+.switch, .name, .description, .createdAt {
+  padding: var(--size-2);
+}
+
+.switch {
+  width: var(--size-14);
+}
+
+.name {
+  flex: 1;
+}
+
+.description {
+  flex: 2;
+}
+
+.createdAt {
+  flex: 1;
+  max-width: var(--size-32);
+}

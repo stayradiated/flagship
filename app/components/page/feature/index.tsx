@@ -1,4 +1,5 @@
 import { useEffect } from 'react'
+import { FlagIcon } from '@heroicons/react/24/outline'
 import { useStore } from './store.js'
 import styles from './index.module.css'
 import type { Feature, AccountList, User } from '~/lib/types'
@@ -24,7 +25,9 @@ const FeaturePage = (props: FeaturePageProps) => {
   return (
     <>
       <Page user={user}>
-        <h2 className={styles.title}>🏁 {feature.name}</h2>
+        <h2 className={styles.title}>
+          <FlagIcon className={styles.flagIcon} /> {feature.name}
+        </h2>
 
         <div className={styles.badgeRow}>
           <Badge>
