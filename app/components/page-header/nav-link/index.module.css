@@ -1,16 +1,23 @@
 .link {
+  font-size: var(--scale-00);
   font-family: var(--font-sans);
   text-decoration: none;
   color: var(--color-grey-500);
+  font-weight: var(--weight-bold);
+  line-height: var(--line-md);
+  border-radius: var(--radius-sm);
+
+  height: var(--size-10);
+  display: flex;
+  align-items: center;
+  padding: 0 var(--size-3);
 }
 .link:hover {
-  text-decoration: underline;
+  background-color: var(--color-grey-100);
 }
 
 .link.isActive {
-  color: var(--color-blue-500);
-  font-weight: var(--weight-bold);
+  color: var(--color-blue-700);
 }
 .link.isActive:hover {
-  color: var(--color-blue-300);
 }

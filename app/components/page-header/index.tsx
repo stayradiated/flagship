@@ -1,5 +1,6 @@
 import { Link } from '@remix-run/react'
 import { memo } from 'react'
+import { FlagIcon, UserIcon } from '@heroicons/react/24/solid'
 import { PageHeaderNavLink } from './nav-link/index'
 import { PageHeaderUserMenu } from './user-menu/index'
 import styles from './index.module.css'
@@ -22,8 +23,14 @@ const PageHeader = memo((props: PageHeaderProps) => {
 
       {user && (
         <nav className={styles.nav}>
-          <PageHeaderNavLink to="/features">Features</PageHeaderNavLink>
-          <PageHeaderNavLink to="/accounts">Accounts</PageHeaderNavLink>
+          <PageHeaderNavLink to="/features" end>
+            <FlagIcon className={styles.icon} />
+            Features
+          </PageHeaderNavLink>
+          <PageHeaderNavLink to="/accounts" end>
+            <UserIcon className={styles.icon} />
+            Accounts
+          </PageHeaderNavLink>
 
           <PageHeaderUserMenu user={user} />
         </nav>

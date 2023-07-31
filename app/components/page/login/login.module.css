@@ -1,16 +1,29 @@
 .button {
+  display: flex;
+  align-items: center;
+
   border: none;
   border-radius: var(--radius-sm);
-  padding: var(--size-2) var(--size-3);
+  padding: var(--size-3) var(--size-4);
   color: var(--color-grey-50);
   background: var(--color-blue);
-  font-size: var(--scale-1);
+  font-size: var(--scale-0);
   font-family: var(--font-sans);
+  font-weight: var(--weight-semibold);
   cursor: pointer;
+}
+.button:hover {
+  background: var(--color-blue-300);
 }
 
 .error {
   color: var(--color-red);
   font-size: var(--scale-1);
   font-family: var(--font-sans);
+}
+
+.icon {
+  width: var(--size-5);
+  height: var(--size-5);
+  margin-right: var(--size-2);
 }

@@ -1,11 +1,13 @@
-import { useEffect } from 'react'
+import { useEffect, useCallback } from 'react'
 import { UserIcon } from '@heroicons/react/24/solid'
+import { toast } from 'react-hot-toast'
 import styles from './index.module.css'
 import { useStore } from './store.js'
 import type { Account, FeatureList, User } from '~/lib/types'
 import { Page } from '~/components/page'
 import { FeatureTable } from '~/components/feature-table'
 import { Badge } from '~/components/badge'
+import { ToggleFeatureToast } from '~/components/toast'
 
 type AccountPageProps = {
   user: User
@@ -14,7 +16,7 @@ type AccountPageProps = {
 }
 
 const AccountPage = (props: AccountPageProps) => {
-  const { user, account, featureList } = props
+  const { user, account, featureList: initialFeatureList } = props
 
   const store = useStore((state) => ({
     init: state.init,
@@ -26,8 +28,31 @@ const AccountPage = (props: AccountPageProps) => {
   }))
 
   useEffect(() => {
-    store.init(featureList, account.id)
+    store.init(initialFeatureList, account.id)
   }, [])
+
+  const handleToggleFeature = useCallback(
+    (options: { accountId: string; featureId: string; enabled: boolean }) => {
+      const { featureId, enabled } = options
+      const feature = store.valueList.find((f) => f?.id === featureId)
+      const featureName = feature?.name ?? 'Unknown feature'
+      toast.custom(
+        (t) => (
+          <ToggleFeatureToast
+            featureName={featureName}
+            accountName={account.name}
+            enabled={enabled}
+            visible={t.visible}
+          />
+        ),
+        {
+          duration: 5000,
+        },
+      )
+      store.toggleFeature(options)
+    },
+    [account, store.valueList],
+  )
 
   return (
     <>
@@ -57,7 +82,7 @@ const AccountPage = (props: AccountPageProps) => {
           total={store.total}
           isLoaded={store.isLoaded}
           loadRange={store.loadRange}
-          onToggleFeature={store.toggleFeature}
+          onToggleFeature={handleToggleFeature}
         />
       </Page>
     </>

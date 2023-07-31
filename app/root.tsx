@@ -9,7 +9,7 @@ import {
   ScrollRestoration,
 } from '@remix-run/react'
 import normalizeStyles from 'normalize.css'
-import { useState } from 'react'
+import { Toaster } from 'react-hot-toast'
 import pollenStyles from '~/pollen.css'
 
 const links: LinksFunction = () => [
@@ -44,6 +44,7 @@ const Route = () => {
         <ScrollRestoration />
         <Scripts />
         <LiveReload />
+        <Toaster position="bottom-right" />
       </body>
     </html>
   )

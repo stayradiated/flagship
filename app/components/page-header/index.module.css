@@ -18,6 +18,12 @@
   color: var(--color-blue-300);
 }
 
+.icon {
+  width: var(--size-5);
+  height: var(--size-5);
+  margin-right: var(--size-2);
+}
+
 .nav {
   display: flex;
   grid-column: 2 / 4;
