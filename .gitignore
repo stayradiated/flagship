@@ -1,6 +1,9 @@
 node_modules
+dist
 
-/.cache
-/build
-/public/build
 .env
+
+flagship/.cache
+flagship/build
+flagship/public/build
+

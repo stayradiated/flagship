@@ -1,0 +1,15 @@
+{
+  "$schema": "https://turbo.build/schema.json",
+  "pipeline": {
+    "tidy": {},
+    "build": {
+      "dependsOn": ["db:generate", "^build"],
+      "inputs": ["./src/**"],
+      "outputs": ["./dist/**"]
+    },
+    "db:generate": {
+      "inputs": ["./prisma/**"],
+      "outputs": ["./src/db/**"]
+    }
+  }
+}

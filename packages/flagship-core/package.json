@@ -1,0 +1,44 @@
+{
+  "name": "@stayradiated/flagship-core",
+  "private": true,
+  "version": "1.0.0",
+  "description": "",
+  "keywords": [],
+  "author": {
+    "name": "George Czabania"
+  },
+  "license": "MIT",
+  "main": "./dist/index.ts",
+  "types": "./dist/index.d.ts",
+  "scripts": {
+    "test": "vitest --watch=false",
+    "tidy": "xo --fix",
+    "build": "tsc"
+  },
+  "type": "module",
+  "devDependencies": {
+    "typescript": "5.1.6",
+    "vitest": "0.34.1",
+    "xo": "0.55.0"
+  },
+  "__comment": "The following configs are managed by `@stayradiated/jsconfig`",
+  "xo": {
+    "space": true,
+    "semicolon": false,
+    "prettier": true
+  },
+  "prettier": {
+    "arrowParens": "always",
+    "bracketSpacing": true,
+    "semi": false,
+    "singleQuote": true,
+    "tabWidth": 2,
+    "trailingComma": "all",
+    "useTabs": false
+  },
+  "imports": {
+    "#src/*": {
+      "node": "./dist/*"
+    }
+  }
+}

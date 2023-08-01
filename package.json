@@ -1,81 +1,13 @@
 {
-  "name": "@stayradiated/flagship",
-  "version": "1.0.0",
+  "name": "flagship",
+  "version": "0.0.0",
   "private": true,
-  "sideEffects": false,
   "scripts": {
-    "build": "remix build",
-    "dev": "remix dev",
-    "start": "remix-serve build",
-    "typecheck": "tsc",
-    "tidy": "xo --fix ./app",
-    "pollen": "pollen"
+    "build": "turbo build",
+    "tidy": "pnpm -r run --no-bail tidy",
+    "update-all": "pnpm update --latest"
   },
   "dependencies": {
-    "@headlessui/react": "1.7.16",
-    "@heroicons/react": "2.0.18",
-    "@remix-run/css-bundle": "1.19.1",
-    "@remix-run/node": "1.19.1",
-    "@remix-run/react": "1.19.1",
-    "@remix-run/serve": "1.19.1",
-    "@stayradiated/mandarin": "4.2.0",
-    "classcat": "5.0.4",
-    "date-fns": "2.30.0",
-    "immer": "10.0.2",
-    "isbot": "3.6.13",
-    "normalize.css": "8.0.1",
-    "p-debounce": "4.0.0",
-    "react": "18.2.0",
-    "react-dom": "18.2.0",
-    "react-hot-toast": "2.4.1",
-    "react-virtualized-auto-sizer": "1.0.20",
-    "react-window": "1.8.9",
-    "react-window-infinite-loader": "1.0.9",
-    "remix-auth": "3.5.0",
-    "remix-auth-google": "1.2.0",
-    "zod": "3.21.4",
-    "zod-form-data": "2.0.1",
-    "zustand": "4.3.9"
-  },
-  "devDependencies": {
-    "@remix-run/dev": "1.19.1",
-    "@remix-run/eslint-config": "1.19.1",
-    "@types/node": "20.4.5",
-    "@types/react": "18.2.17",
-    "@types/react-dom": "18.2.7",
-    "@types/react-window": "1.8.5",
-    "@types/react-window-infinite-loader": "1.0.6",
-    "eslint": "8.46.0",
-    "pollen-css": "4.6.2",
-    "typescript": "5.1.6",
-    "xo": "0.55.0"
-  },
-  "engines": {
-    "node": ">=14.0.0"
-  },
-  "xo": {
-    "space": true,
-    "semicolon": false,
-    "prettier": true,
-    "rules": {
-      "n/file-extension-in-import": "off",
-      "import/extensions": "Off",
-      "@typescript-eslint/ban-types": "off",
-      "unicorn/filename-case": "off"
-    }
-  },
-  "prettier": {
-    "arrowParens": "always",
-    "bracketSpacing": true,
-    "semi": false,
-    "singleQuote": true,
-    "tabWidth": 2,
-    "trailingComma": "all",
-    "useTabs": false
-  },
-  "pnpm": {
-    "patchedDependencies": {
-      "@remix-run/node@1.19.1": "patches/@remix-run__node@1.19.1.patch"
-    }
+    "turbo": "1.10.12"
   }
 }

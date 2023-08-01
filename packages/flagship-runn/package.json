@@ -1,0 +1,47 @@
+{
+  "name": "@stayradiated/flagship-runn",
+  "version": "1.0.0",
+  "main": "./dist/index.js",
+  "scripts": {
+    "tidy": "xo --fix",
+    "test": "vitest --watch=false",
+    "build": "tsc",
+    "graphql": "graphql-code-generator --config ./graphql.codegen.cjs"
+  },
+  "keywords": [],
+  "author": {
+    "name": "George Czabania"
+  },
+  "license": "MIT",
+  "type": "module",
+  "dependencies": {
+    "@stayradiated/flagship-core": "workspace:*",
+    "date-fns": "2.30.0",
+    "zod": "3.21.4"
+  },
+  "devDependencies": {
+    "@graphql-codegen/cli": "5.0.0",
+    "@graphql-codegen/hasura-allow-list": "2.0.0",
+    "@graphql-codegen/typescript": "4.0.1",
+    "@graphql-codegen/typescript-operations": "4.0.1",
+    "@types/node": "20.4.5",
+    "typescript": "5.1.6",
+    "vitest": "0.34.1",
+    "xo": "0.55.0"
+  },
+  "__comment": "The following configs are managed by `@stayradiated/jsconfig`",
+  "xo": {
+    "space": true,
+    "semicolon": false,
+    "prettier": true
+  },
+  "prettier": {
+    "arrowParens": "always",
+    "bracketSpacing": true,
+    "semi": false,
+    "singleQuote": true,
+    "tabWidth": 2,
+    "trailingComma": "all",
+    "useTabs": false
+  }
+}

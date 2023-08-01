@@ -83,7 +83,7 @@ export type UpdateFeatureFn = (
   }>,
 ) => Promise<void>
 
-export type FlagshipBackend = {
+export type FlagshipService = {
   getFeature: GetFeatureFn
   getFeatureList: GetFeatureListFn
 
