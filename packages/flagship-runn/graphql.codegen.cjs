@@ -4,7 +4,7 @@ module.exports = {
       'http://localhost:8080/v1/graphql': {
         headers: {
           'x-hasura-admin-secret': 'TripleCommaClub',
-          'x-hasura-allowed-roles': 'flagship',
+          'x-hasura-role': 'flagship',
         },
       },
     },
