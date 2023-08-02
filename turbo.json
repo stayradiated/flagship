@@ -3,13 +3,9 @@
   "pipeline": {
     "tidy": {},
     "build": {
-      "dependsOn": ["graphql", "^build"],
+      "dependsOn": ["^build"],
       "inputs": ["./src/**"],
       "outputs": ["./dist/**"]
-    },
-    "graphql": {
-      "inputs": ["./src/**", "!./src/graphql.generated.ts"],
-      "outputs": ["./src/graphql.generated.ts"]
     }
   }
 }

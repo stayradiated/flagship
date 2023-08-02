@@ -1,0 +1,21 @@
+# by default we exclude everything from the Docker worker...
+*
+
+!/turbo.json
+!/package.json
+!/pnpm-lock.yaml
+!/pnpm-workspace.yaml
+!/patches/*
+
+!/flagship/app
+!/flagship/package.json
+!/flagship/remix.config.js
+!/flagship/tsconfig.json
+
+!/packages/flagship-core/src
+!/packages/flagship-core/package.json
+!/packages/flagship-core/tsconfig.json
+
+!/packages/flagship-runn/src
+!/packages/flagship-runn/package.json
+!/packages/flagship-runn/tsconfig.json
