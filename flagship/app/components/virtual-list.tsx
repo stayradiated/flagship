@@ -1,8 +1,10 @@
 import AutoSizer from 'react-virtualized-auto-sizer'
 import InfiniteLoader from 'react-window-infinite-loader'
-import { FixedSizeList as List } from 'react-window'
+import {
+  FixedSizeList as List,
+  type ListChildComponentProps,
+} from 'react-window'
 import type { Range } from '@stayradiated/mandarin'
-import type { ListChildComponentProps } from 'react-window'
 
 type VirtualListProps<Data> = {
   data: Data

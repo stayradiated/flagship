@@ -1,7 +1,7 @@
 import { useEffect } from 'react'
+import type { FeatureList, User } from '@stayradiated/flagship-core'
 import styles from './index.module.css'
 import { useStore } from './store.js'
-import type { FeatureList, User } from '~/lib/types'
 import { Page } from '~/components/page'
 import { FeatureTable } from '~/components/feature-table'
 import { SearchInput } from '~/components/search-input'

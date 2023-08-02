@@ -1,9 +1,9 @@
 import { useMemo } from 'react'
 import type { Range } from '@stayradiated/mandarin'
+import type { Feature } from '@stayradiated/flagship-core'
 import styles from './feature-table.module.css'
 import { VirtualList } from './virtual-list'
 import { FeatureTableRow } from './feature-table-row'
-import type { Feature } from '~/lib/types'
 import { TableHead } from '~/components/table-head'
 
 type FeatureTableProps = {

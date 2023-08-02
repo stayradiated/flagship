@@ -1,5 +1,4 @@
-import { NavLink } from '@remix-run/react'
-import type { NavLinkProps } from '@remix-run/react'
+import { NavLink, type NavLinkProps } from '@remix-run/react'
 import cc from 'classcat'
 import styles from './index.module.css'
 

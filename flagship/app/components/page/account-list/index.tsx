@@ -1,7 +1,7 @@
 import { useEffect } from 'react'
+import type { AccountList, User } from '@stayradiated/flagship-core'
 import styles from './index.module.css'
 import { useStore } from './store.js'
-import type { AccountList, User } from '~/lib/types'
 import { Page } from '~/components/page'
 import { AccountTable } from '~/components/account-table'
 import { SearchInput } from '~/components/search-input'

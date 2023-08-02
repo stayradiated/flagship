@@ -1,13 +1,13 @@
 import { Authenticator, AuthorizationError } from 'remix-auth'
 import { GoogleStrategy } from 'remix-auth-google'
+import type { FlagshipService, User } from '@stayradiated/flagship-core'
 import { getEnv } from './env.server'
 import { sessionStorage } from '~/lib/session.server'
-import type { FlagshipBackend, User } from '~/lib/types'
 // Import { once} from './utils/once'
 
 const env = getEnv()
 
-const getAuthenticator = (backend: FlagshipBackend) => {
+const getAuthenticator = (backend: FlagshipService) => {
   const googleStrategy = new GoogleStrategy(
     {
       clientID: env.googleClientId,

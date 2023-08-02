@@ -6,8 +6,8 @@ import {
   ChevronDownIcon,
   ArrowLeftOnRectangleIcon,
 } from '@heroicons/react/20/solid'
+import type { User } from '@stayradiated/flagship-core'
 import styles from './index.module.css'
-import type { User } from '~/lib/types'
 
 type PageHeaderUserMenuProps = {
   user: User

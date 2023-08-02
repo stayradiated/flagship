@@ -1,9 +1,12 @@
-import type { V2_MetaFunction, LoaderFunction } from '@remix-run/node'
-import { json } from '@remix-run/node'
+import {
+  json,
+  type V2_MetaFunction,
+  type LoaderFunction,
+} from '@remix-run/node'
 import { useLoaderData } from '@remix-run/react'
 import { getAuthenticator } from '~/lib/auth.server'
 import { LoginPage } from '~/components/page/login'
-import { createRunnBackend } from '~/lib/runn.server'
+import { createBackend } from '~/lib/backend.server'
 import { getSession } from '~/lib/session.server'
 
 type LoaderData = {
@@ -20,7 +23,7 @@ const meta: V2_MetaFunction<LoaderData> = () => {
 }
 
 const loader: LoaderFunction = async ({ request }) => {
-  const backend = createRunnBackend()
+  const backend = createBackend()
   const authenticator = getAuthenticator(backend)
 
   await authenticator.isAuthenticated(request, {

@@ -1,10 +1,10 @@
 import { Link } from '@remix-run/react'
 import { memo } from 'react'
 import { FlagIcon, UserIcon } from '@heroicons/react/24/solid'
+import type { User } from '@stayradiated/flagship-core'
 import { PageHeaderNavLink } from './nav-link/index'
 import { PageHeaderUserMenu } from './user-menu/index'
 import styles from './index.module.css'
-import type { User } from '~/lib/types'
 
 type PageHeaderProps = {
   user?: User

@@ -4,9 +4,9 @@ import {
   fetchList,
   rangeContainsPoint,
   rangeLength,
+  type Range,
 } from '@stayradiated/mandarin'
-import type { Range } from '@stayradiated/mandarin'
-import type { Feature, FeatureList } from '~/lib/types'
+import type { Feature, FeatureList } from '@stayradiated/flagship-core'
 
 type State = ReturnType<typeof getInitialState<Feature>>
 

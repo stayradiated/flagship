@@ -1,6 +1,6 @@
+import type { User } from '@stayradiated/flagship-core'
 import styles from './page.module.css'
 import { PageHeader } from './page-header/index'
-import type { User } from '~/lib/types'
 
 type PageProps = {
   user?: User

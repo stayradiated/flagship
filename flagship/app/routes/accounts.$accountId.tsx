@@ -1,14 +1,14 @@
-import type {
-  V2_MetaFunction,
-  LoaderFunction,
-  ActionFunction,
+import {
+  json,
+  type V2_MetaFunction,
+  type LoaderFunction,
+  type ActionFunction,
 } from '@remix-run/node'
-import { json } from '@remix-run/node'
 import { useLoaderData } from '@remix-run/react'
 import { z } from 'zod'
 import { zfd } from 'zod-form-data'
-import { createRunnBackend } from '~/lib/runn.server'
-import type { Account, FeatureList, User } from '~/lib/types'
+import type { Account, FeatureList, User } from '@stayradiated/flagship-core'
+import { createBackend } from '~/lib/backend.server'
 import { AccountPage } from '~/components/page/account'
 import { getAuthenticator } from '~/lib/auth.server'
 import { namedAction } from '~/lib/utils/named-action'
@@ -32,7 +32,7 @@ const $Parameters = z.object({
 })
 
 const loader: LoaderFunction = async ({ request, params }) => {
-  const backend = createRunnBackend()
+  const backend = createBackend()
   const authenticator = getAuthenticator(backend)
 
   const user = await authenticator.authenticate('google', request, {
@@ -59,7 +59,7 @@ const $ToggleFeatureFormData = zfd.formData({
 })
 
 const action: ActionFunction = async ({ request, params }) => {
-  const backend = createRunnBackend()
+  const backend = createBackend()
 
   return namedAction(request, {
     async toggleFeature() {

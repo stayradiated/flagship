@@ -5,9 +5,17 @@
   "scripts": {
     "build": "turbo build",
     "tidy": "pnpm -r run --no-bail tidy",
-    "update-all": "pnpm update --latest"
+    "update-all": "pnpm -r exec ncu --cache -u"
   },
   "dependencies": {
     "turbo": "1.10.12"
+  },
+  "devDependencies": {
+    "npm-check-updates": "16.10.17"
+  },
+  "pnpm": {
+    "patchedDependencies": {
+      "@remix-run/node@1.19.1": "patches/@remix-run__node@1.19.1.patch"
+    }
   }
 }

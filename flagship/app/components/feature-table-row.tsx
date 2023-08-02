@@ -3,8 +3,8 @@ import * as dateFns from 'date-fns'
 import cc from 'classcat'
 import { areEqual } from 'react-window'
 import { memo } from 'react'
+import type { Feature } from '@stayradiated/flagship-core'
 import styles from './feature-table-row.module.css'
-import type { Feature } from '~/lib/types'
 import { Switch } from '~/components/switch'
 
 type FeatureTableRowProps = {

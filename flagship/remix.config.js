@@ -15,6 +15,9 @@ module.exports = {
     v2_routeConvention: true,
   },
   serverDependenciesToBundle: [
+    '@stayradiated/flagship-core',
+    '@stayradiated/flagship-runn',
+
     '@stayradiated/mandarin',
       'piratemap',
 

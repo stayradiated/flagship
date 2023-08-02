@@ -1,9 +1,9 @@
 import { useMemo } from 'react'
 import type { Range } from '@stayradiated/mandarin'
+import type { Account } from '@stayradiated/flagship-core'
 import styles from './account-table.module.css'
 import { AccountTableRow } from './account-table-row'
 import { VirtualList } from './virtual-list'
-import type { Account } from '~/lib/types'
 import { TableHead } from '~/components/table-head'
 
 type AccountTableProps = {

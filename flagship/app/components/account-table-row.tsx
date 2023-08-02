@@ -2,8 +2,8 @@ import { Link } from '@remix-run/react'
 import cc from 'classcat'
 import { areEqual } from 'react-window'
 import { memo } from 'react'
+import type { Account } from '@stayradiated/flagship-core'
 import styles from './account-table-row.module.css'
-import type { Account } from '~/lib/types'
 import { Badge } from '~/components/badge'
 
 type AccountTableRowProps = {

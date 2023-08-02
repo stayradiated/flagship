@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "main": "./dist/index.js",
   "scripts": {
-    "tidy": "xo --fix",
+    "tidy": "xo --fix ./src",
     "test": "vitest --watch=false",
     "build": "tsc",
     "graphql": "graphql-code-generator --config ./graphql.codegen.cjs"
@@ -24,7 +24,7 @@
     "@graphql-codegen/hasura-allow-list": "2.0.0",
     "@graphql-codegen/typescript": "4.0.1",
     "@graphql-codegen/typescript-operations": "4.0.1",
-    "@types/node": "20.4.5",
+    "@types/node": "20.4.6",
     "typescript": "5.1.6",
     "vitest": "0.34.1",
     "xo": "0.55.0"

@@ -4,9 +4,9 @@ import {
   fetchList,
   rangeContainsPoint,
   rangeLength,
+  type Range,
 } from '@stayradiated/mandarin'
-import type { Range } from '@stayradiated/mandarin'
-import type { Account, AccountList } from '~/lib/types'
+import type { Account, AccountList } from '@stayradiated/flagship-core'
 
 type State = ReturnType<typeof getInitialState<Account>>
 

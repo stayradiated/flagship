@@ -1,9 +1,8 @@
-import type { LoaderFunction } from '@remix-run/node'
-import { json } from '@remix-run/node'
+import { json, type LoaderFunction } from '@remix-run/node'
 import { zfd } from 'zod-form-data'
 import { z } from 'zod'
-import { createRunnBackend } from '~/lib/runn.server'
-import type { AccountList } from '~/lib/types'
+import type { AccountList } from '@stayradiated/flagship-core'
+import { createBackend } from '~/lib/backend.server'
 import { getAuthenticator } from '~/lib/auth.server'
 
 type LoaderData = {
@@ -19,7 +18,7 @@ const $LoaderSearchParameters = zfd.formData({
 })
 
 const loader: LoaderFunction = async ({ request }) => {
-  const backend = createRunnBackend()
+  const backend = createBackend()
   const authenticator = getAuthenticator(backend)
 
   await authenticator.authenticate('google', request, {

@@ -12,7 +12,7 @@
   "types": "./dist/index.d.ts",
   "scripts": {
     "test": "vitest --watch=false",
-    "tidy": "xo --fix",
+    "tidy": "xo --fix ./src",
     "build": "tsc"
   },
   "type": "module",
